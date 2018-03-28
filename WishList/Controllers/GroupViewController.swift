@@ -8,10 +8,11 @@
 
 import UIKit
 
-class DataViewController: UIViewController {
+class GroupViewController: UIViewController {
 
     @IBOutlet weak var dataLabel: UILabel!
-    var dataObject: String = ""
+
+    var groups = [GiftGroup]()
 
 
     override func viewDidLoad() {
@@ -26,7 +27,7 @@ class DataViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.dataLabel!.text = dataObject
+        //self.dataLabel!.text = dataObject
     }
 
 

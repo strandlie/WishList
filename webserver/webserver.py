@@ -4,77 +4,96 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from json import dumps
 from flask.ext.jsonpify import jsonify
-from msc import MySQLCursorPrepared
-from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
+from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, ForeignKeyConstraint, create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationshop
 
-"""
-Connect to the db
-"""
-def connect_to_db():
-    try:
-        cnx = msc.connect(user='tutorial_user', password='tutorial_pw',
-              host='tutorial-db-instance.c0lilbtiidoe.eu-central-1.rds.amazonaws.com',
-              database='sample')
-        return cnx
-
-    except mysql.connector.Error as err:
-        print(err)
-
+Base = declarative_base()
 app = Flask(__name__)
 api = API(app)
+
+"""
+ORM classes
+"""
+class Person(Base):
+    __tablename__ = 'person'
+    
+    person_id = Column(Integer, primary_key=True)
+    name = Column('name', String)
+
+
+class Group(Base):
+    __tablename__ = 'group'
+    
+    group_id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+
+
+class PersonInGroup(Base):
+    __tablename__ = 'person_in_group'
+
+    person_id = Column(Integer, ForeignKey(Person.person_id), primary_key=True)
+    group_id = Column(Integer, ForeignKey(Group.group_id),  primary_key=True)
+
+    person = relationship(Person)
+    group = relationship(Group)
+
+class Gift(Base):
+    __tablename__ = 'gift'
+
+    gift_id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+    description = Column(String),
+    url = Column(String)
+
+class Wish(Base):
+    __tablename__ = 'wish'
+
+    recepient_id = Column(Integer, ForeignKey(Person.person_id), primary_key=True)
+    group_id = Column(Integer, ForeignKey(Group.group_id), primary_key=True)
+    gift_id = Column(Integer, ForeignKey(Gift.gift_id), primary_key=True)
+    quantity = Column(Integer, nullable=False)
+
+    recepient = relationship(Person)
+    group = relationship(Group)
+    gift = relationship(Gift)
+
+
+class WishFulfilled(Base):
+    __tablename__ = 'wish_fulfilled'
+
+    buyer_id = Column(Integer, ForeignKey(Person.person_id), primary_key=True)
+    recepient_id = Column(Integer, primary_key=True)
+    group_id = Column(Integer, primary_key=True)
+    gift_id = Column(Integer, primary_key=True)
+    quantity = Column(Integer, nullable=False)
+
+    # Relationship for composite foreign key
+    __table_args__  = (ForeignKeyConstraint([recepient_id, group_id, gift_id], [Wish.person_id, Wish.group_id, Wish.gift_id]))
+    
+
 
 """
 Create the tables
 """
 def create_tables():
-    metadata = MetaData()
-    person = Table('person', metadata,
-            Column('person_id', Integer, primary_key=True),
-            Column('name', String)
-            )
 
-    group = Table('group', metadata,
-            Column('group_id', Integer, primary_key=True),
-            Column('group_name', String)
-            )
+    engine = create_engine('mysql+mysqlconnector://tutorial_user:tutorial_pw@tutorial-db-instance.c0lilbtiidoe.eu-central-1.rds.amazonaws.com/sample')
 
-    person_in_group = Table('person_in_group', metadata,
-            Column('person_id', None, primary_key=True, ForeignKey('person.person_id')),
-            Column('group_id', None, primary_key=True,  ForeignKey('group.group_id'))
-            )
-
-    gift = Table('gift', metadata,
-            Column('gift_id', Integer, primary_key=True),
-            Column('title', String),
-            Column('description', String),
-            Column('url', String)
-            )
-
-    wish = Table('wish', metadata,
-            Column('person_id', None, primary_key=True, ForeignKey('person.person_id'),
-            Column('group_id', None, primary_key=True, ForeignKey('group.group_id'),
-            Column('gift_id', None, primary
-
-
-
-    
-
-
-class Person(Resource):
-
+    # Bind the engine to the metadata of the Base class so that the
+    # declaratives can be accessed through a DBSession instance
+    Base.metadata.create_all(engine)
+     
     """
-    Get all persons from database
+    DBSession = sessionmaker(bind=engine)
+    # A DBSession() instance establishes all conversations with the database
+    # and represents a "staging zone" for all the objects loaded into the
+    # database session object. Any change made against the objects in the
+    # session won't be persisted into the database until you call
+    # session.commit(). If you're not happy about the changes, you can
+    # revert all of them back to the last commit by calling
+    # session.rollback()
+    session = DBSession()
     """
-    def get(self):
-        db_connect = connect_to_db()
-        conn = db_connect.connect()
-        query = conn.execute("SELECT * FROM person")
-
-    def get(self, person_id):
-        db_connect = connect_to_db()
-        conn = db_connect.connect()
-        cursor = conn.cursor(cursor_class=MSQLCursorPrepared, prepared=True)
-        statement = "SELECT * FROM person WHERE person_id = %s"
-        cursor.execute(statement, (person_id))
 
 

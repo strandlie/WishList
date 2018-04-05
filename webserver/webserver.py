@@ -1,16 +1,16 @@
 import mysql.connector as msc
+import flask_jsonpify
 
 from flask import Flask, request
 from flask_restful import Resource, Api
 from json import dumps
-from flask.ext.jsonpify import jsonify
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, ForeignKeyConstraint, create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationshop
+from sqlalchemy.orm import relationship, sessionmaker
 
 Base = declarative_base()
 app = Flask(__name__)
-api = API(app)
+api = Api(app)
 
 """
 ORM classes
@@ -19,14 +19,14 @@ class Person(Base):
     __tablename__ = 'person'
     
     person_id = Column(Integer, primary_key=True)
-    name = Column('name', String)
+    name = Column(String(30))
 
 
 class Group(Base):
     __tablename__ = 'group'
     
     group_id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
+    name = Column(String(50), nullable=False)
 
 
 class PersonInGroup(Base):
@@ -42,9 +42,9 @@ class Gift(Base):
     __tablename__ = 'gift'
 
     gift_id = Column(Integer, primary_key=True)
-    title = Column(String, nullable=False)
-    description = Column(String),
-    url = Column(String)
+    title = Column(String(100), nullable=False)
+    description = Column(String(200)),
+    url = Column(String(200))
 
 class Wish(Base):
     __tablename__ = 'wish'
@@ -69,7 +69,7 @@ class WishFulfilled(Base):
     quantity = Column(Integer, nullable=False)
 
     # Relationship for composite foreign key
-    __table_args__  = (ForeignKeyConstraint([recepient_id, group_id, gift_id], [Wish.person_id, Wish.group_id, Wish.gift_id]))
+    __table_args__  = (ForeignKeyConstraint([recepient_id, group_id, gift_id], [Wish.recepient_id, Wish.group_id, Wish.gift_id]), )
     
 
 
@@ -84,7 +84,6 @@ def create_tables():
     # declaratives can be accessed through a DBSession instance
     Base.metadata.create_all(engine)
      
-    """
     DBSession = sessionmaker(bind=engine)
     # A DBSession() instance establishes all conversations with the database
     # and represents a "staging zone" for all the objects loaded into the
@@ -94,6 +93,15 @@ def create_tables():
     # revert all of them back to the last commit by calling
     # session.rollback()
     session = DBSession()
-    """
+
+    new_person = Person(name = "Haakon Strandlie")
+    session.add(new_person)
+    session.commit()
+
+    print(session.query(Person).first().name)
 
 
+
+
+
+create_tables()

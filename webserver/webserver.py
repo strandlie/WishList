@@ -94,14 +94,6 @@ def create_tables():
     # session.rollback()
     session = DBSession()
 
-    new_person = Person(name = "Haakon Strandlie")
-    session.add(new_person)
-    session.commit()
+if __name__ == "__main__":
+    create_tables()
 
-    print(session.query(Person).first().name)
-
-
-
-
-
-create_tables()

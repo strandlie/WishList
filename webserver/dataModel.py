@@ -32,7 +32,7 @@ class Person(Base):
     
     groups = relationship(Group, secondary=personInGroup, back_populates=Group.members)
     wishes = relationship(Wish, back_populates=Wish.recepient)
-    fulfilments = relationship(WishFulfilled, back_populates=WishFulfilled.fulfiller_id)
+    fulfilments = relationship(WishFulfilled, back_populates=WishFulfilled.fulfiller)
 
     def __init__(self, name):
         self.name = name
@@ -91,6 +91,7 @@ class Gift(Base):
     # which means that this is a list of all wishes that this 
     # gift is a part of. 
     wishes = relationship(Wish, back_populates=Wish.gift)
+    fulfilments = relationship(WishFulfilled, back_populates=WishFulfilled.gift)
 
     def __init__(self, title = None, description = None, url = None):
         self.title = title
@@ -135,12 +136,17 @@ class Gift(Base):
     def isPartOfWish(self, wish):
         return wish in self.wishes
 
+    def getNumberOfFulfilments(self):
+        return len(fulfilments)
+
 
 
 class Wish(Base):
     __tablename__ = 'wish'
 
     # Has an ID-field for every part of the primary key
+    # These are set automatically from the objects in the relationships below.
+    # Does not need to be set explicitly
     recepient_id = Column(Integer, primary_key=True, ForeignKey(Person.person_id))
     group_id = Column(Integer, primary_key=True, ForeignKey(Group.group_id))
     gift_id = Column(Integer, primary_key=True, ForeignKey(Gift.gift_id))
@@ -158,8 +164,6 @@ class Wish(Base):
         elif quantity < 0:
             raise ValueError("Quantity must be >= 0")
 
-        """
-        MUST ADD ASSIGNMENT TO THE ID FIELDS HERE"""
         
         self.recepient = recepient
         self.group = group
@@ -194,13 +198,46 @@ class WishFulfilled(Base):
     gift_id = Column(Integer, primary_key=True)
     quantity = Column(Integer, nullable=False)
 
-    # Relationship for composite foreign key.
+    # Definition of ForeignKey
     # Done this way, because specifying them separately as ForeignKey
     # would not have the intended effect. 
     __table_args__  = (ForeignKeyConstraint([recepient_id, group_id, gift_id], [Wish.recepient_id, Wish.group_id, Wish.gift_id]), )
 
-    fulfiller = relationship(Person, back_populates=Person.fulfilments)
+    fulfiller = relationship(Person, back_populates=Person.fulfilments, foreign_keys=[fulfiller_id])
+    recepient = relationship(Person, foreign_keys=[recepient_id])
+    group = relationship(Group, back_populates=Group.wishes)
+    gift = relationship(Gift, back_populates=Gift.fulfilments)
     
 
-    def __init__(self, )
-    """COMPLETE THiS"""
+    def __init__(self, fulfiller, recepient, group, gift, quantity)
+        if fulfiller == None or recepient == None or group == None or gift == None or quantity == None:
+            raise ValueError("No argument to Wish can be None.")
+        elif quantity < 0:
+            raise ValueError("Quantity must be >= 0")
+
+        self.fulfiller = fulfiller
+        self.recepient = recepient
+        self.group = group
+        self.gift = gift
+        self.quantity = quantity
+
+    def getFulfiller(self):
+        return self.fulfiller
+
+    def getRecepient(self):
+        return self.recepient
+
+    def getGroup(self):
+        return self.group
+
+    def getGift(self):
+        return self.gift
+
+    def setQuantity(self, quantity):
+        if quantity >= 0:
+            self.quantity = quantity
+
+    def getQuantity(self):
+        return self.quantity
+
+    

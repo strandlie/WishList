@@ -16,9 +16,9 @@ api = Api(app)
 """
 Association tables
 """
-personInGroup = Table('person_in_group', Base.metadata,
-    Column('person_id', ForeignKey(Person.person_id), primary_key=True),
-    Column('group_id', ForeignKey(Group.group_id),  primary_key=True)
+personInGroup = Table('person_in_gift_group', Base.metadata,
+    Column('person_id', ForeignKey('person.person_id'), primary_key=True),
+    Column('gift_group_id', ForeignKey('gift_group.gift_group_id'),  primary_key=True)
 )
 
 """
@@ -30,35 +30,35 @@ class Person(Base):
     person_id = Column(Integer, primary_key=True)
     name = Column(String(30))
     
-    groups = relationship(Group, secondary=personInGroup, back_populates=Group.members)
-    wishes = relationship(Wish, back_populates=Wish.recepient)
-    fulfilments = relationship(WishFulfilled, back_populates=WishFulfilled.fulfiller)
+    gift_groups = relationship('Group', secondary=personInGroup, back_populates='members')
+    wishes = relationship('Wish', back_populates='recepient')
+    fulfilments = relationship('WishFulfilled', back_populates='fulfiller')
 
     def __init__(self, name):
         self.name = name
 
-    def addToGroup(self, group):
-        if not isInGroup(group):
-            self.groups.append(group)
+    def addToGroup(self, gift_group):
+        if not isInGroup(gift_group):
+            self.gift_groups.append(gift_group)
 
-    def removeFromGroup(self, group):
-        if isInGroup(group):
-            self.groups.remove(group)
+    def removeFromGroup(self, gift_group):
+        if isInGroup(gift_group):
+            self.gift_groups.remove(gift_group)
 
-    def isInGroup(self, group):
-        return group in self.groups
+    def isInGroup(self, gift_group):
+        return gift_group in self.gift_groups
 
 
 class Group(Base):
-    __tablename__ = 'group'
+    __tablename__ = 'gift_group'
     
-    group_id = Column(Integer, primary_key=True)
+    gift_group_id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False)
 
     # Since Person-Group is a many-to-many relationship, we use the secondary 
     # personInGroup Table to map this relationship
-    members = relationship(Person, secondary=personInGroup, back_populates=Person.groups)
-    wishes = relationship(Wish, back_populates=Wish.group)
+    members = relationship('Person', secondary=personInGroup, back_populates='gift_groups')
+    wishes = relationship('Wish', back_populates='gift_group')
 
     def __init__(self, name):
         self.name = name
@@ -90,8 +90,8 @@ class Gift(Base):
     # the relationship will be defined by the ForeignKey in Wish, 
     # which means that this is a list of all wishes that this 
     # gift is a part of. 
-    wishes = relationship(Wish, back_populates=Wish.gift)
-    fulfilments = relationship(WishFulfilled, back_populates=WishFulfilled.gift)
+    wishes = relationship('Wish', back_populates='gift')
+    fulfilments = relationship('WishFulfilled', back_populates='gift')
 
     def __init__(self, title = None, description = None, url = None):
         self.title = title
@@ -147,26 +147,26 @@ class Wish(Base):
     # Has an ID-field for every part of the primary key
     # These are set automatically from the objects in the relationships below.
     # Does not need to be set explicitly
-    recepient_id = Column(Integer, primary_key=True, ForeignKey(Person.person_id))
-    group_id = Column(Integer, primary_key=True, ForeignKey(Group.group_id))
-    gift_id = Column(Integer, primary_key=True, ForeignKey(Gift.gift_id))
+    recepient_id = Column(Integer, ForeignKey('person.person_id'), primary_key=True)
+    gift_group_id = Column(Integer, ForeignKey('gift_group.gift_group_id'), primary_key=True)
+    gift_id = Column(Integer, ForeignKey('gift.gift_id'), primary_key=True)
     quantity = Column(Integer, nullable=False)
 
     # The relationships are configured from the ForeignKeys above
-    recepient = relationship(Person, back_populates=Person.wishes)
-    group = relationship(Group, back_populates=Group.wishes)
-    gift = relationship(Gift, back_populates=Gift.wishes)
+    recepient = relationship('Person', back_populates='wishes')
+    gift_group = relationship('Group', back_populates='wishes')
+    gift = relationship('Gift', back_populates='wishes')
 
 
-    def __init__(self, recepient, group, gift, quantity):
-        if recepient == None or group == None or gift == None or quantity == None:
+    def __init__(self, recepient, gift_group, gift, quantity):
+        if recepient == None or gift_group == None or gift == None or quantity == None:
             raise ValueError("No argument to Wish can be None.")
         elif quantity < 0:
             raise ValueError("Quantity must be >= 0")
 
         
         self.recepient = recepient
-        self.group = group
+        self.gift_group = gift_group
         self.gift = gift
         self.quantity = quantity
 
@@ -175,7 +175,7 @@ class Wish(Base):
         return self.recepient
 
     def getGroup(self):
-        return self.group
+        return self.gift_group
 
     def getGift(self):
         return self.gift
@@ -192,32 +192,32 @@ class Wish(Base):
 class WishFulfilled(Base):
     __tablename__ = 'wish_fulfilled'
 
-    fulfiller_id = Column(Integer, ForeignKey(Person.person_id), primary_key=True)
-    recepient_id = Column(Integer, primary_key=True)
-    group_id = Column(Integer, primary_key=True)
-    gift_id = Column(Integer, primary_key=True)
+    fulfiller_id = Column(Integer, ForeignKey('person.person_id'), primary_key=True)
+    recepient_id = Column(Integer, ForeignKey('person.person_id'), primary_key=True)
+    gift_group_id = Column(Integer, ForeignKey('gift_group.gift_group_id'), primary_key=True)
+    gift_id = Column(Integer, ForeignKey('gift.gift_id'), primary_key=True)
     quantity = Column(Integer, nullable=False)
 
     # Definition of ForeignKey
     # Done this way, because specifying them separately as ForeignKey
     # would not have the intended effect. 
-    __table_args__  = (ForeignKeyConstraint([recepient_id, group_id, gift_id], [Wish.recepient_id, Wish.group_id, Wish.gift_id]), )
+    __table_args__  = (ForeignKeyConstraint(['recepient_id', 'gift_group_id', 'gift_id'], ['wish.recepient_id', 'wish.gift_group_id', 'wish.gift_id']), )
 
-    fulfiller = relationship(Person, back_populates=Person.fulfilments, foreign_keys=[fulfiller_id])
-    recepient = relationship(Person, foreign_keys=[recepient_id])
-    group = relationship(Group, back_populates=Group.wishes)
-    gift = relationship(Gift, back_populates=Gift.fulfilments)
+    fulfiller = relationship('Person', back_populates='fulfilments', foreign_keys='WishFulfilled.fulfiller_id')
+    recepient = relationship('Person', foreign_keys='WishFulfilled.recepient_id')
+    gift_group = relationship('Group', back_populates='wishes')
+    gift = relationship('Gift', back_populates='fulfilments')
     
 
-    def __init__(self, fulfiller, recepient, group, gift, quantity)
-        if fulfiller == None or recepient == None or group == None or gift == None or quantity == None:
+    def __init__(self, fulfiller, recepient, gift_group, gift, quantity):
+        if fulfiller == None or recepient == None or gift_group == None or gift == None or quantity == None:
             raise ValueError("No argument to Wish can be None.")
         elif quantity < 0:
             raise ValueError("Quantity must be >= 0")
 
         self.fulfiller = fulfiller
         self.recepient = recepient
-        self.group = group
+        self.gift_group = gift_group
         self.gift = gift
         self.quantity = quantity
 
@@ -228,7 +228,7 @@ class WishFulfilled(Base):
         return self.recepient
 
     def getGroup(self):
-        return self.group
+        return self.gift_group
 
     def getGift(self):
         return self.gift

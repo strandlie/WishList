@@ -1,21 +1,9 @@
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
 
 import dataModel
 
 
-
-class PersonDatabaseController():
-    def create(person):
-
-    def update(person):
-
-    def retrieve(person_id):
-
-    def retrieveAll():
-
-    def delete(person):
-
-    
 
 
 """
@@ -23,11 +11,11 @@ Create the tables
 """
 def create_tables():
 
-    engine = create_engine('mysql+mysqlconnector://tutorial_user:tutorial_pw@tutorial-db-instance.c0lilbtiidoe.eu-central-1.rds.amazonaws.com/sample')
+    engine = create_engine('mysql+mysqlconnector://wishlist_master:AVX-N98-CLM-MTz@wishlist-db-instance.c0lilbtiidoe.eu-central-1.rds.amazonaws.com/public_wishlist_db')
 
     # Bind the engine to the metadata of the Base class so that the
     # declaratives can be accessed through a DBSession instance
-    Base.metadata.create_all(engine)
+    dataModel.Base.metadata.create_all(engine)
      
     DBSession = sessionmaker(bind=engine)
     # A DBSession() instance establishes all conversations with the database

@@ -13,23 +13,25 @@ class Gift: NSObject {
     
     
     //MARK: Properties
+    var id: Int
+    var title: String
+    var description: String?
+    var url: URL?
     var wantedBy: Person
     var boughtBy: [Person]
-    var title: String
-    var giftID: Int?
-    var giftDescription: String?
-    var url: URL?
+
     
     //MARK: Initialization
-    init?(title:String, wantedBy: Person, boughtBy: [Person], description:String?, url: String?) {
+    init?(id: Int, title: String, wantedBy: Person, boughtBy: [Person], description: String?, url: String?) {
        
         guard !(title.isEmpty) else {
             return nil;
         }
         
-        self.wantedBy = wantedBy
+        self.id = id
         self.title = title
-        self.giftDescription = description
+        self.description = description
+        self.wantedBy = wantedBy
         self.boughtBy = boughtBy
         
         super.init()
@@ -39,6 +41,20 @@ class Gift: NSObject {
             return
         }
         self.url = URL(string: urlPath)
+    }
+    
+    func setWantedBy(person: Person) {
+        self.wantedBy = person
+    }
+    
+    func getWantedBy() -> Person {
+        return self.wantedBy
+    }
+    
+    func addBoughtBy(persons: [Person]) {
+        for person in persons {
+            
+        }
     }
     
     

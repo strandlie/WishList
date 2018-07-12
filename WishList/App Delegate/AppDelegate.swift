@@ -16,6 +16,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        var person = Person(name: "Todd Terje")
+        var gdc = GiftDatabaseController()
+        print("Running")
+        gdc.create(object: person!)
         return true
     }
 

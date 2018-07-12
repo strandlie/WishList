@@ -12,7 +12,7 @@ import OHMySQL
 class Person: NSObject  {
     
     //MARK: Properties
-    var personID: Int?
+    var personID: Int
     var name: String
    
     

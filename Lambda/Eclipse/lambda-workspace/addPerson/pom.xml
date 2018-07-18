@@ -3,5 +3,22 @@
   <groupId>com.strandlie.lambda</groupId>
   <artifactId>addPerson</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
   <name>AddPerson</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.amazonaws</groupId>
+    	<artifactId>aws-lambda-java-core</artifactId>
+    	<version>1.1.0</version>
+  	</dependency>
+  	<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+	<dependency>
+    	<groupId>mysql</groupId>
+    	<artifactId>mysql-connector-java</artifactId>
+    	<version>8.0.11</version>
+	</dependency>
+  </dependencies>
 </project>

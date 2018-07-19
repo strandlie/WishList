@@ -27,13 +27,6 @@ public class AddPersonRequest {
 	 */
 	private String pictureURL;
 	
-	/*public AddPersonRequest(String firstName, String lastName, String email, String phoneNr, String pictureURL) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.phoneNr = phoneNr;
-		this.pictureURL = pictureURL;
-	}*/
 	
 	@Override
 	public String toString() {

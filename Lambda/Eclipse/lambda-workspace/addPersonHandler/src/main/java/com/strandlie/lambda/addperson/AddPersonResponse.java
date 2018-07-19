@@ -25,9 +25,6 @@ public class AddPersonResponse {
 	}
 
 	public String getErrorMessage() {
-		if (errorMessage == null) {
-			return "";
-		}
 		return errorMessage;
 	}
 

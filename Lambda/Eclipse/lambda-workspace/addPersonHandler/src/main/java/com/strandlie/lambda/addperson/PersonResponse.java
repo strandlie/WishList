@@ -1,20 +1,29 @@
 package com.strandlie.lambda.addperson;
 
-public class AddPersonResponse {
-	private boolean personisAdded;
+public class PersonResponse {
+	private boolean personIsAdded;
+	private boolean personIsUpdated;
 	private int personID;
 	private String errorMessage;
 	
-	public AddPersonResponse(boolean personIsAdded) {
-		this.personisAdded = personIsAdded;
+	public PersonResponse(boolean personIsAdded) {
+		this.personIsAdded = personIsAdded;
 	}
 	
 	public boolean getPersonIsAdded() {
-		return personisAdded;
+		return personIsAdded;
 	}
 	
 	public void setPersonIsAdded(boolean personIsAdded) {
-		this.personisAdded = personIsAdded;
+		this.personIsAdded = personIsAdded;
+	}
+	
+	public boolean getPersonIsUpdated() {
+		return personIsUpdated;
+	}
+	
+	public void setPersonIsUpdated(boolean personIsUpdated) {
+		this.personIsUpdated = personIsUpdated;
 	}
 	
 	public int getId() {

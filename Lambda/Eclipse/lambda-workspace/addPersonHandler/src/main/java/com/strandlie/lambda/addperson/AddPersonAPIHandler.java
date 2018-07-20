@@ -10,15 +10,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
-public class AddPersonAPIHandler implements RequestHandler<AddPersonRequest, AddPersonResponse> {
+public class AddPersonAPIHandler implements RequestHandler<PersonRequest, PersonResponse> {
 	
 	private PreparedStatement statement;
 
     @Override
-    public AddPersonResponse handleRequest(AddPersonRequest request, Context context) {
+    public PersonResponse handleRequest(PersonRequest request, Context context) {
         context.getLogger().log("Received request: \n" + request.toString() + "\n");
 
-		AddPersonResponse response = new AddPersonResponse(false);
+		PersonResponse response = new PersonResponse(false);
 		
 		String firstName = request.getFirstName();
 		String lastName = request.getLastName();

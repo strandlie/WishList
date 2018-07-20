@@ -1,6 +1,6 @@
 package com.strandlie.lambda.addperson;
 
-public class AddPersonRequest {
+public class PersonRequest {
 	
 	/**
 	 * The first name of the person specified in the API call JSON

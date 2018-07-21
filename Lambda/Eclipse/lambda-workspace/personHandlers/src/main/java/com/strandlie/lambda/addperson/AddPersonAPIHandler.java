@@ -16,6 +16,12 @@ import java.sql.Types;
 
 public class AddPersonAPIHandler extends APIHandler {
 	
+	private boolean isTest;
+	
+	public AddPersonAPIHandler() {
+		isTest = false;
+	}
+	
 
     @Override
     public PersonResponse handleRequest(PersonRequest request, Context context) {
@@ -81,6 +87,14 @@ public class AddPersonAPIHandler extends APIHandler {
 		}
 		connection.close();
 		return -1;
+	}
+	
+	public void createConnection() {
+		
+	}
+	
+	public void isTest(boolean isTest) {
+		this.isTest = isTest;
 	}
 	
 

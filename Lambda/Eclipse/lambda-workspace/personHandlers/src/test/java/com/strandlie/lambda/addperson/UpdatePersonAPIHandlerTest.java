@@ -13,7 +13,7 @@ import com.amazonaws.services.lambda.runtime.Context;
  */
 public class UpdatePersonAPIHandlerTest {
 
-    private static Object input;
+    private static PersonRequest input;
 
     @BeforeClass
     public static void createInput() throws IOException {
@@ -35,7 +35,7 @@ public class UpdatePersonAPIHandlerTest {
         UpdatePersonAPIHandler handler = new UpdatePersonAPIHandler();
         Context ctx = createContext();
 
-        String output = handler.handleRequest(input, ctx);
+        PersonResponse output = handler.handleRequest(input, ctx);
 
         // TODO: validate output here if needed.
         Assert.assertEquals("Hello from Lambda!", output);

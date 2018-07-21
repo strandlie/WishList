@@ -6,9 +6,6 @@ public class PersonResponse {
 	private int personID;
 	private String errorMessage;
 	
-	public PersonResponse(boolean personIsAdded) {
-		this.personIsAdded = personIsAdded;
-	}
 	
 	public boolean getPersonIsAdded() {
 		return personIsAdded;

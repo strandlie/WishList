@@ -16,12 +16,6 @@ import java.sql.Types;
 
 public class AddPersonAPIHandler extends APIHandler {
 	
-	private boolean isTest;
-	
-	public AddPersonAPIHandler() {
-		isTest = false;
-	}
-	
 
     @Override
     public PersonResponse handleRequest(PersonRequest request, Context context) {
@@ -53,7 +47,7 @@ public class AddPersonAPIHandler extends APIHandler {
 			// Using RuntimeException to be able to return the error through the API
 			throw new DatabaseErrorException("Could not add the person to the database", e.toString());
 		}
-		context.getLogger().log("\nRequest successfully processed\n");
+		context.getLogger().log("\nCreate request successfully processed\n");
 		
 		return response;
     }
@@ -62,11 +56,12 @@ public class AddPersonAPIHandler extends APIHandler {
 	private int createInDatabase(String firstName, String lastName, String email, String phoneNr, String pictureURL) throws SQLException  {
 		
 		String sql = "INSERT INTO person (firstName, lastName, email, phoneNr, pictureURL)" +
-					  "VALUE?, ?)";
-		connection = DriverManager.getConnection("jdbc:mysql://" + 
-					  			System.getenv("DBUsername") + ":" + 
-					  			System.getenv("DBPassword") + 
-					  			"@" + System.getenv("DBPath"));
+					  "VALUES(?, ?, ?, ?, ?)";
+		connection = DriverManager.getConnection(
+						"jdbc:" + System.getenv("DBDriver") + ":" + System.getenv("DBPath"),
+						System.getenv("DBUsername"),
+						System.getenv("DBPassword"));
+		
 		connection.setCatalog(System.getenv("DBDatabase"));
 
 		PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -88,14 +83,4 @@ public class AddPersonAPIHandler extends APIHandler {
 		connection.close();
 		return -1;
 	}
-	
-	public void createConnection() {
-		
-	}
-	
-	public void isTest(boolean isTest) {
-		this.isTest = isTest;
-	}
-	
-
 }

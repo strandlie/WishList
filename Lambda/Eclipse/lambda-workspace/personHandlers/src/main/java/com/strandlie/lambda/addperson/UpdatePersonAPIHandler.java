@@ -32,9 +32,15 @@ public class UpdatePersonAPIHandler extends APIHandler {
     	Map<String, String> notNullFieldNames = request.getNotNullFieldNames();
     	
     	try {
-			connection = DriverManager.getConnection("jdbc:mysql://" + System.getenv("DBPath"), System.getenv("DBUsername"), System.getenv("DBPassword"));
+			connection = DriverManager.getConnection(
+							"jdbc:" + System.getenv("DBDriver") + ":" + System.getenv("DBPath"), 
+							System.getenv("DBUsername"), 
+							System.getenv("DBPassword"));
+			
+			
 			connection.setCatalog(System.getenv("DBDatabase"));
 			connection.setAutoCommit(false);
+			
 			for (String fieldName : notNullFieldNames.keySet()) {
 				// Takes the returned PreparedStatement from the updateInDatabase method and adds to the list
 				String newValue = notNullFieldNames.get(fieldName);
@@ -63,11 +69,12 @@ public class UpdatePersonAPIHandler extends APIHandler {
 			connection.commit();
 			connection.close();
 			response.setPersonIsUpdated(true);
+			response.setId(id);
     	}
     	catch (SQLException e) {
     		response.setErrorMessage(e.toString());
-    		context.getLogger().log("Database error: " + e.toString());
-    		throw new DatabaseErrorException("Could not update person with ID: " + Integer.toString(id), e.toString());
+    		throw new DatabaseErrorException("Could not create connection and update.", e.toString());
+    		
     	}
     	context.getLogger().log("\nUpdate successfully processed\n");
     	return response;

@@ -18,7 +18,8 @@ public class PersonRequest extends Object {
 	
 	@Override
 	public String toString() {
-		return "firstName: " + this.getFirstName() +
+		return "id: " + this.getId() + 
+				"\nfirstName: " + this.getFirstName() +
 				"\nlastName: " + this.getLastName() +
 				"\nemail: " + this.getEmail() + 
 				"\nphoneNr: " + this.getPhoneNr() + 
@@ -33,10 +34,10 @@ public class PersonRequest extends Object {
 		return this.fields;
 	}
 	
-	public int getId() {
+	public Integer getId() {
 		String temp_id = this.fields().getOrDefault("id", null);
 		if (temp_id == null) {
-			throw new InvalidCreateRequestStateException("ID");
+			return null;
 		}
 		return Integer.parseInt(temp_id);
 		

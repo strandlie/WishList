@@ -1,7 +1,8 @@
 CREATE TABLE person(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	firstName VARCHAR( ),
-	lastName VARCHAR( ),
-	email VARCHAR( ),
-	phoneNr VARCHAR( ),
-	pictureURL VARCHAR( ));
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	firstName VARCHAR(60),
+	lastName VARCHAR(100),
+	email VARCHAR(200),
+	phoneNr VARCHAR(20),
+	pictureURL VARCHAR(300)
+);

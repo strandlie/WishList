@@ -1,6 +1,7 @@
 package com.strandlie.lambda.addperson;
 
 public class PersonResponse {
+	
 	private boolean personIsAdded;
 	private boolean personIsUpdated;
 	private int personID;
@@ -37,5 +38,4 @@ public class PersonResponse {
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
-
 }

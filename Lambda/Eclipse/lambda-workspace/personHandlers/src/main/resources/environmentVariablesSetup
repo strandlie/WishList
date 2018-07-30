@@ -1,0 +1,7 @@
+#!/bin/bash
+
+launchctl setenv DBPath '//localhost?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false'
+launchctl setenv DBDriver mysql
+launchctl setenv DBUsername wishlist_master
+launchctl setenv DBPassword AVX-N98-CLM-MTz
+launchctl setenv DBDatabase wishlist

@@ -7,15 +7,21 @@
 //
 
 import UIKit
-import OHMySQL
-import SwiftWebSocket
+import URLSession
 
 class GiftDatabaseController: DatabaseCRUD {
     func create(object: AnyObject) {
         let login = loginData()
-        let ws = WebSocket(login.dbServerName)
-        print(ws.description)
-        let user = OHMySQLUser(userName: login.userName, password: login.password, serverName: login.dbServerName, dbName: login.dbName, port: UInt(login.portNr), socket: ws.description)
+        do {
+            let socket = try SocketAddress()
+            
+        }
+        catch {
+        
+        }
+        
+        //let user = OHMySQLUser(userName: login.userName, password: login.password, serverName: login.dbServerName, dbName: login.dbName, port: UInt(login.portNr), socket: ws.description)
+        
     }
     
     func retrieve() -> AnyObject? {

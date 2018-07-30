@@ -1,4 +1,4 @@
-package com.strandlie.lambda.addperson;
+package com.strandlie.lambda.item;
 
 import com.amazonaws.services.lambda.runtime.ClientContext;
 import com.amazonaws.services.lambda.runtime.CognitoIdentity;

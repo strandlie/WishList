@@ -1,4 +1,4 @@
-package com.strandlie.lambda.addperson;
+package com.strandlie.lambda.item;
 
 import java.io.IOException;
 import java.io.InputStream;

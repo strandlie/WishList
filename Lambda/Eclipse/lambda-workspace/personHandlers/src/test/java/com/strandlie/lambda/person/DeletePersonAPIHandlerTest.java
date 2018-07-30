@@ -1,6 +1,6 @@
-package com.strandlie.lambda.addperson;
+package com.strandlie.lambda.person;
 
-
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,21 +15,11 @@ import com.amazonaws.services.lambda.runtime.Context;
 /**
  * A simple test harness for locally invoking your Lambda function handler.
  */
-public class AddPersonAPIHandlerTest {
+public class DeletePersonAPIHandlerTest {
 
-    private static PersonRequest addPersonInput;
-
-    @BeforeClass
-    public static void createInput() {
-        // TODO: set up your sample input object here.
-        addPersonInput = new PersonRequest();
-        addPersonInput.setFirstName("Marte");
-        addPersonInput.setLastName("Sivesind");
-        addPersonInput.setEmail("martesivesind@gmail.com");
-        addPersonInput.setPhoneNr("99511597");
-        addPersonInput.setPictureURL("skjdla.iitjhja.hgb");
-        
-    }
+	private static PersonRequest initialPersonInput;
+    private static PersonRequest deletePersonInput;
+    
     
     @BeforeClass
     public static void createDatabase() {
@@ -56,11 +46,31 @@ public class AddPersonAPIHandlerTest {
 		
 		
     }
+
+    @BeforeClass
+    public static void createInput() throws IOException {
+        initialPersonInput = new PersonRequest();
+        initialPersonInput.setFirstName("Marte");
+        initialPersonInput.setLastName("Sivesind");
+        initialPersonInput.setEmail("martesivesind@gmail.com");
+        initialPersonInput.setPhoneNr("99511597");
+        initialPersonInput.setPictureURL("skjdla.iitjhja.hgb");
+    	
+    	deletePersonInput = new PersonRequest();
+    	deletePersonInput.setId(1);
+    }
     
+    private void setupInitialDatabase(Context ctx) throws SQLException {
+    	AddPersonAPIHandler handler = new AddPersonAPIHandler();
+    	
+    	handler.handleRequest(initialPersonInput, ctx);
+    	
+    }
+
     private Context createContext() {
         TestContext ctx = new TestContext();
 
-        ctx.setFunctionName("addPerson");
+        ctx.setFunctionName("updatePerson");
         ctx.setMemoryLimitInMB(128);
         ctx.setRemainingTimeInMillis(15000);
 
@@ -68,12 +78,19 @@ public class AddPersonAPIHandlerTest {
     }
 
     @Test
-    public void testAddPersonAPIHandlerReturnsIDExpectOne() {
-        AddPersonAPIHandler handler = new AddPersonAPIHandler();
+    public void testdeletePerson() {
+        DeletePersonAPIHandler handler = new DeletePersonAPIHandler();
         Context ctx = createContext();
+        try {
+			setupInitialDatabase(ctx);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        
+        PersonResponse output = (PersonResponse) handler.handleRequest(deletePersonInput, ctx);
+        
+        Assert.assertEquals(true, output.getPersonIsDeleted());
+        Assert.assertEquals(0, output.getId());
 
-        PersonResponse output = handler.handleRequest(addPersonInput, ctx);
-
-        Assert.assertEquals(1, output.getId());
     }
 }

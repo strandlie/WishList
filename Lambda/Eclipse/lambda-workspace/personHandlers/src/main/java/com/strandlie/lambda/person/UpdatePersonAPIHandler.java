@@ -1,44 +1,38 @@
-package com.strandlie.lambda.addperson;
+package com.strandlie.lambda.person;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
 
+import common.APIHandler;
+import common.APIRequest;
+import common.APIResponse;
 import exceptions.DatabaseErrorException;
 import exceptions.InvalidUpdateRequestFormatException;
 
 public class UpdatePersonAPIHandler extends APIHandler {
 	
+	private PersonRequest request;
+	
 
     @Override
-    public PersonResponse handleRequest(PersonRequest request, Context context) {
+    public APIResponse handleRequest(APIRequest request, Context context) {
         context.getLogger().log("Received update request with new values: \n" + request.toString() + "\n");
         
+        this.request = APIRequestIsPersonRequest(request);
     	PersonResponse response = new PersonResponse();
     	response.setPersonIsUpdated(false);
     	
-    	int id = request.getId();
-    	if (id == -1) {
-    		throw new InvalidUpdateRequestFormatException("-1 is invalid id for update");
+    	Integer id = this.request.getId();
+    	if (id == null) {
+    		throw new InvalidUpdateRequestFormatException("Invalid ID for update: " + request.getId().toString());
     	}
-    	Map<String, String> notNullFieldNames = request.getNotNullFieldNames();
+    	Map<String, String> notNullFieldNames = this.request.getNotNullFields();
     	
     	try {
-			connection = DriverManager.getConnection(
-							"jdbc:" + System.getenv("DBDriver") + ":" + System.getenv("DBPath"), 
-							System.getenv("DBUsername"), 
-							System.getenv("DBPassword"));
-			
-			
-			connection.setCatalog(System.getenv("DBDatabase"));
+    		getConnection();
 			connection.setAutoCommit(false);
 			
 			for (String fieldName : notNullFieldNames.keySet()) {
@@ -125,5 +119,17 @@ public class UpdatePersonAPIHandler extends APIHandler {
     	setInt(2, id, statement);
     	statement.executeUpdate();    	
     }
+    
+    
+	private PersonRequest APIRequestIsPersonRequest(APIRequest request) {
+		try {
+			PersonRequest r = (PersonRequest) request;
+			return r;
+		}
+		catch (ClassCastException e) {
+			throw new RuntimeException("API Request: " + request.toString() + " is not" + 
+			" a PersonRequest.");
+		}
+	}
 
 }

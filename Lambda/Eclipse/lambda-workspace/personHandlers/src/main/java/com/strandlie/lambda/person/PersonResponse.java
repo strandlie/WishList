@@ -1,11 +1,12 @@
-package com.strandlie.lambda.addperson;
+package com.strandlie.lambda.person;
 
-public class PersonResponse {
+import common.APIResponse;
+
+public class PersonResponse extends APIResponse {
 	
 	private boolean personIsAdded;
 	private boolean personIsUpdated;
-	private int personID;
-	private String errorMessage;
+	private boolean personIsDeleted;
 	
 	
 	public boolean getPersonIsAdded() {
@@ -24,18 +25,12 @@ public class PersonResponse {
 		this.personIsUpdated = personIsUpdated;
 	}
 	
-	public int getId() {
-		return personID;
-	}
-	public void setId(int id) {
-		this.personID = id;
+	public boolean getPersonIsDeleted() {
+		return personIsDeleted;
 	}
 
-	public String getErrorMessage() {
-		return errorMessage;
+	public void setPersonIsDeleted(boolean personIsDeleted) {
+		this.personIsDeleted = personIsDeleted;
 	}
 
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
 }

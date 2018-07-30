@@ -1,4 +1,4 @@
-package com.strandlie.lambda.addperson;
+package com.strandlie.lambda.person;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -11,6 +11,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import com.strandlie.lambda.addperson.TestContext;
+import com.strandlie.lambda.person.AddPersonAPIHandler;
+import com.strandlie.lambda.person.PersonRequest;
+import com.strandlie.lambda.person.PersonResponse;
+import com.strandlie.lambda.person.UpdatePersonAPIHandler;
 
 /**
  * A simple test harness for locally invoking your Lambda function handler.
@@ -58,11 +63,6 @@ public class UpdatePersonAPIHandlerTest {
         updatePersonInput = new PersonRequest();
         updatePersonInput.setId(1);
         updatePersonInput.setFirstName("Martin");
-        /*updatePersonInput.setLastName("Stangjordet");
-        updatePersonInput.setEmail("martin.stangjordet@gmail.com");
-        updatePersonInput.setPhoneNr("81549300");
-        updatePersonInput.setPictureURL("hhhla.skjda.nkl");
-        */
     }
     
     private void setupInitialDatabase(Context ctx) throws SQLException {
@@ -92,7 +92,7 @@ public class UpdatePersonAPIHandlerTest {
 			e.printStackTrace();
 		}
     	
-    	PersonResponse output = handler.handleRequest(updatePersonInput, ctx);
+    	PersonResponse output = (PersonResponse) handler.handleRequest(updatePersonInput, ctx);
     	
     	Assert.assertEquals(true, output.getPersonIsUpdated());
     	Assert.assertEquals(1, output.getId());

@@ -1,8 +1,11 @@
-package com.strandlie.lambda.addperson;
+package com.strandlie.lambda.person;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
+import common.APIHandler;
+import common.APIRequest;
+import common.APIResponse;
 import exceptions.DatabaseErrorException;
 import exceptions.InvalidCreateRequestFormatException;
 
@@ -16,31 +19,36 @@ import java.sql.Types;
 
 public class AddPersonAPIHandler extends APIHandler {
 	
+	private PersonRequest request;
+	
 
     @Override
-    public PersonResponse handleRequest(PersonRequest request, Context context) {
+    public APIResponse handleRequest(APIRequest request, Context context) {
         context.getLogger().log("Received create request with values: \n" + request.toString() + "\n");
 
+        this.request = APIRequestIsPersonRequest(request);
 		PersonResponse response = new PersonResponse();
 		response.setPersonIsAdded(false);
 		
-		String firstName = request.getFirstName();
-		String lastName = request.getLastName();
+		
+		String firstName = this.request.getFirstName();
+		String lastName = this.request.getLastName();
 		if (firstName == null) {
 			throw new InvalidCreateRequestFormatException("firstName");
 		}
-		else if (lastName == null) { throw new InvalidCreateRequestFormatException("lastName");
+		else if (lastName == null) { 
+			throw new InvalidCreateRequestFormatException("lastName");
 		}
 		
-		String email = request.getEmail();
-		String phoneNr = request.getPhoneNr();
-		String pictureURL = request.getPictureURL();
+		String email = this.request.getEmail();
+		String phoneNr = this.request.getPhoneNr();
+		String pictureURL = this.request.getPictureURL();
 		
 		try {
 			int id = createInDatabase(firstName, lastName, email, phoneNr, pictureURL);
 			response.setId(id);
 			response.setPersonIsAdded(true);
-			}
+		}
 		catch (SQLException e) {
 			response.setErrorMessage(e.toString());
 			context.getLogger().log("Database error: " + e.toString());
@@ -57,13 +65,9 @@ public class AddPersonAPIHandler extends APIHandler {
 		
 		String sql = "INSERT INTO person (firstName, lastName, email, phoneNr, pictureURL)" +
 					  "VALUES(?, ?, ?, ?, ?)";
-		connection = DriverManager.getConnection(
-						"jdbc:" + System.getenv("DBDriver") + ":" + System.getenv("DBPath"),
-						System.getenv("DBUsername"),
-						System.getenv("DBPassword"));
-		
-		connection.setCatalog(System.getenv("DBDatabase"));
 
+		getConnection();
+		
 		PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 		setStringOrNull(1, firstName, statement);
 		setStringOrNull(2, lastName, statement);
@@ -82,5 +86,16 @@ public class AddPersonAPIHandler extends APIHandler {
 		}
 		connection.close();
 		return -1;
+	}
+	
+	private PersonRequest APIRequestIsPersonRequest(APIRequest request) {
+		try {
+			PersonRequest r = (PersonRequest) request;
+			return r;
+		}
+		catch (ClassCastException e) {
+			throw new RuntimeException("API Request: " + request.toString() + " is not" + 
+			" a PersonRequest.");
+		}
 	}
 }

@@ -2,7 +2,9 @@ language: java
 jdk:
         - oraclejdk8
 sudo: false
-script: mvn clean install -f personHandlers/pom.xml $MAVEN_CLI_OPTS
+script:
+    cd Lambda/Eclipse/lambda-workspace/
+    mvn test -f personHandlers/pom.xml $MAVEN_CLI_OPTS
 notifications:
     email: false
 

@@ -15,11 +15,10 @@ import com.amazonaws.services.lambda.runtime.Context;
 /**
  * A simple test harness for locally invoking your Lambda function handler.
  */
-public class DeletePersonAPIHandlerTest {
+public class GetPersonAPIHandlerTest {
 
-	private static PersonRequest initialPersonInput;
-    private static PersonRequest deletePersonInput;
-    
+    private static PersonRequest initialPersonInput;
+    private static PersonRequest getPersonInput;
     
     @BeforeClass
     public static void createDatabase() {
@@ -43,26 +42,21 @@ public class DeletePersonAPIHandlerTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
     }
 
     @BeforeClass
     public static void createInput() throws IOException {
-        initialPersonInput = new PersonRequest();
-        initialPersonInput.setFirstName("Marte");
-        initialPersonInput.setLastName("Sivesind");
-        initialPersonInput.setEmail("tull@tull.no");
-        initialPersonInput.setPhoneNr("12345678");
+    	initialPersonInput = new PersonRequest();
+    	initialPersonInput.setFirstName("Marte");
+    	initialPersonInput.setLastName("Sivesind");
+    	initialPersonInput.setEmail("tull@tull.no");
+    	initialPersonInput.setPhoneNr("12345678");
         initialPersonInput.setPictureURL("skjdla.iitjhja.hgb");
-    	
-    	deletePersonInput = new PersonRequest();
-    	deletePersonInput.setId(1);
-    }
-    
-    private void setupInitialDatabase(Context ctx) {
-    	AddPersonAPIHandler handler = new AddPersonAPIHandler();
-    	
-    	handler.handleRequest(initialPersonInput, ctx);
-    	
+        
+        getPersonInput = new PersonRequest();
+        getPersonInput.setId(1);
     }
 
     private Context createContext() {
@@ -74,17 +68,26 @@ public class DeletePersonAPIHandlerTest {
 
         return ctx;
     }
+    
+    private void setupInitialDatabase(Context ctx) {
+    	AddPersonAPIHandler handler = new AddPersonAPIHandler();
+    	
+    	handler.handleRequest(initialPersonInput, ctx);
+    }
 
     @Test
-    public void testDeletePersonAPIHandler() {
-        DeletePersonAPIHandler handler = new DeletePersonAPIHandler();
+    public void testGetPersonAPIHandler() {
+        GetPersonAPIHandler handler = new GetPersonAPIHandler();
         Context ctx = createContext();
 		setupInitialDatabase(ctx);
         
-        PersonResponse output = (PersonResponse) handler.handleRequest(deletePersonInput, ctx);
+        PersonResponse output = (PersonResponse) handler.handleRequest(getPersonInput, ctx);
         
-        Assert.assertEquals(true, output.getPersonIsDeleted());
-        Assert.assertEquals(1, output.getId());
+        Assert.assertEquals(initialPersonInput.getFirstName(), output.getFirstName());
+        Assert.assertEquals(initialPersonInput.getLastName(), output.getLastName());
+        Assert.assertEquals(initialPersonInput.getEmail(), output.getEmail());
+        Assert.assertEquals(initialPersonInput.getPhoneNr(), output.getPhoneNr());
+        Assert.assertEquals(initialPersonInput.getPictureURL(), output.getPictureURL());
 
     }
 }

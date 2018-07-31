@@ -1,10 +1,9 @@
 package com.strandlie.lambda.person;
 
-import java.util.HashMap;
+
 import java.util.Map;
 
 import common.APIRequest;
-import exceptions.InvalidCreateRequestStateException;
 
 public class PersonRequest extends APIRequest {
 	

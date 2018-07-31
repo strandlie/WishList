@@ -1,15 +1,27 @@
 package common;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class APIResponse {
 	
-	private int personID;
+	private int id;
 	private String errorMessage;
 	
+	private Map<String, String> fields;
+	
+	protected Map<String, String> fields() {
+		if (this.fields == null) {
+			this.fields = new HashMap<>();
+		}
+		return this.fields;
+	}
+	
 	public int getId() {
-		return personID;
+		return id;
 	}
 	public void setId(int id) {
-		this.personID = id;
+		this.id = id;
 	}
 
 	public String getErrorMessage() {

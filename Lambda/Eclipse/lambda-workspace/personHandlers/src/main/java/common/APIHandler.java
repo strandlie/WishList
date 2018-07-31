@@ -3,19 +3,23 @@ package common;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.strandlie.lambda.person.PersonRequest;
-import com.strandlie.lambda.person.PersonResponse;
 
 public abstract class APIHandler implements RequestHandler<APIRequest, APIResponse> {
 	
+	public static final String PERSONTABLE = "person";
+	public static final String ITEMTABLE = "item";
+	public static final String IDCOLUMN = "id";
+	
 	protected Connection connection;
+	protected ResultSet resultSet;
+	protected PreparedStatement statement;
 	
-	
-	protected static void setStringOrNull(int parameterIndex, String string, PreparedStatement statement) throws SQLException {
+	protected void setStringOrNull(int parameterIndex, String string) throws SQLException {
 		if (string == null) {
 			statement.setNull(parameterIndex, Types.VARCHAR);
 		}
@@ -24,9 +28,53 @@ public abstract class APIHandler implements RequestHandler<APIRequest, APIRespon
 		}
 	}
 	
-	protected static void setInt(int parameterIndex, int value, PreparedStatement statement) throws SQLException {
+	protected void setDoubleOrNull(int parameterIndex, Double number) throws SQLException {
+		if (number == null) {
+			statement.setNull(parameterIndex, Types.DOUBLE);
+		}
+		else {
+			statement.setDouble(parameterIndex, number);
+		}
+	}
+	
+	protected void setInt(int parameterIndex, int value) throws SQLException {
 		statement.setInt(parameterIndex, value);
 	}
+	
+    protected void updateInDatabase(String tableName, String columnNameForUpdate, String newValue, String columnNameForSelection, int id) throws SQLException {
+    	String sql = prePrepareUpdateStatement(tableName, columnNameForUpdate, columnNameForSelection);
+    	
+    	statement = connection.prepareStatement(sql);
+    	setStringOrNull(1, newValue);
+    	setInt(2, id);
+    	statement.executeUpdate();
+    }
+    
+    protected void updateInDatabase(String tableName, String columnNameForUpdate, int newValue, String columnNameForSelection, int id) throws SQLException {
+    	String sql = prePrepareUpdateStatement(tableName, columnNameForUpdate, columnNameForSelection);
+    	
+    	statement = connection.prepareStatement(sql);
+    	setInt(1, newValue);
+    	setInt(2, id);
+    	statement.executeUpdate();
+    }
+    
+    protected void updateInDatabase(String tableName, String columnNameForUpdate, Double newValue, String columnNameForSelection, int id) throws SQLException {
+    	String sql = prePrepareUpdateStatement(tableName, columnNameForUpdate, columnNameForSelection);
+    	
+    	statement = connection.prepareStatement(sql);
+    	setDoubleOrNull(1, newValue);
+    	setInt(2, id);
+    	statement.executeUpdate();
+    }
+    
+    protected void deleteFromDatabase(int id) throws SQLException {
+    	String sql = "DELETE FROM item WHERE id = ?";
+    	
+    	statement = connection.prepareStatement(sql);
+    	setInt(1, id);
+    	statement.executeUpdate();
+    }
 	
 	protected void getConnection() throws SQLException {
 		connection = DriverManager.getConnection(
@@ -35,6 +83,38 @@ public abstract class APIHandler implements RequestHandler<APIRequest, APIRespon
 						System.getenv("DBPassword"));
 		
 		connection.setCatalog(System.getenv("DBDatabase"));
+	}
+	
+	protected String prePrepareUpdateStatement(String tableName, String columnNameForUpdate, String columnNameForSelection) {
+		StringBuilder string = new StringBuilder();
+		string.append("UPDATE " + tableName + " ");
+		string.append("SET " + columnNameForUpdate + " = ? ");
+		string.append("WHERE " + columnNameForSelection + " = ?");
+		return string.toString();
+	}
+	
+	
+	/**
+	 * Tries to close the resources connected to the DB-connection. Doesn't do anything if it can't close.
+	 */
+	protected void closeDatabaseConnection() {
+			try { 
+				if (!(resultSet == null)) {
+					resultSet.close(); 
+				}
+			} catch (SQLException e) {}
+			
+			try { 
+				if (!(statement == null)) {
+					statement.close(); 
+				}
+			} catch (SQLException e) {}
+			
+			try { 
+				if (!(connection == null)) {
+					connection.close(); 
+				}
+			} catch (SQLException e) {}
 	}
 
 }

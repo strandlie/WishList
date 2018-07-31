@@ -11,7 +11,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.amazonaws.services.lambda.runtime.Context;
-import com.strandlie.lambda.addperson.TestContext;
 import com.strandlie.lambda.person.AddPersonAPIHandler;
 import com.strandlie.lambda.person.PersonRequest;
 import com.strandlie.lambda.person.PersonResponse;
@@ -27,7 +26,7 @@ public class UpdatePersonAPIHandlerTest {
     
     @BeforeClass
     public static void createDatabase() {
-		Connection connection;
+		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection("jdbc:" + System.getenv("DBDriver") + ":" + System.getenv("DBPath"), System.getenv("DBUsername"), System.getenv("DBPassword"));
 			connection.setCatalog(System.getenv("DBDatabase"));
@@ -44,7 +43,6 @@ public class UpdatePersonAPIHandlerTest {
 					");");
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -56,8 +54,8 @@ public class UpdatePersonAPIHandlerTest {
         initialPersonInput = new PersonRequest();
         initialPersonInput.setFirstName("Marte");
         initialPersonInput.setLastName("Sivesind");
-        initialPersonInput.setEmail("martesivesind@gmail.com");
-        initialPersonInput.setPhoneNr("99511597");
+        initialPersonInput.setEmail("tull@tull.no");
+        initialPersonInput.setPhoneNr("12345678");
         initialPersonInput.setPictureURL("skjdla.iitjhja.hgb");
         
         updatePersonInput = new PersonRequest();

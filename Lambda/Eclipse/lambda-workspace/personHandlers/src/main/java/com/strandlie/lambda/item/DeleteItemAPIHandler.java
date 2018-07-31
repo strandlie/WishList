@@ -1,4 +1,4 @@
-package com.strandlie.lambda.person;
+package com.strandlie.lambda.item;
 
 import java.sql.SQLException;
 
@@ -10,19 +10,19 @@ import common.APIResponse;
 import exceptions.DatabaseErrorException;
 import exceptions.InvalidUpdateRequestFormatException;
 
-public class DeletePersonAPIHandler extends APIHandler {
+public class DeleteItemAPIHandler extends APIHandler {
 	
-	private PersonRequest request;
+	private ItemRequest request;
 
-    @Override
-    public APIResponse handleRequest(APIRequest request, Context context) {
-        context.getLogger().log("Received delete request: \n" + request.toString());
-        
-        this.request = APIRequestIsPersonRequest(request);
-        PersonResponse response = new PersonResponse();
-        response.setPersonIsDeleted(false);
-        
-        Integer id = this.request.getId();
+	@Override
+	public APIResponse handleRequest(APIRequest request, Context context) {
+		context.getLogger().log("Received delete request: \n" + request.toString());
+		
+		this.request = APIRequestIsItemRequest(request);
+		ItemResponse response = new ItemResponse();
+		response.setItemIsDeleted(false);
+		
+		Integer id = this.request.getId();
         if (id == null) {
         	throw new InvalidUpdateRequestFormatException("Invalid ID for delete: " + request.getId().toString());
         }
@@ -30,27 +30,27 @@ public class DeletePersonAPIHandler extends APIHandler {
         try {
         	getConnection();
         	deleteFromDatabase(id);
-        	response.setPersonIsDeleted(true);
+        	response.setItemIsDeleted(true);
         	response.setId(id);
+        	
         } catch (SQLException e) {
         	throw new DatabaseErrorException("Could not create connection and delete", e.toString());
         } finally {
         	closeDatabaseConnection();
         }
-        context.getLogger().log("\nDelete successfully processed");
-        return response;
-    }
-    
-    
-	private PersonRequest APIRequestIsPersonRequest(APIRequest request) {
+		context.getLogger().log("\nDelete successfully processed");
+		return response;
+	}
+
+	
+	private ItemRequest APIRequestIsItemRequest(APIRequest request) {
 		try {
-			PersonRequest r = (PersonRequest) request;
+			ItemRequest r = (ItemRequest) request;
 			return r;
 		}
 		catch (ClassCastException e) {
 			throw new RuntimeException("API Request: " + request.toString() + " is not" + 
-			" a PersonRequest.");
+			" an ItemRequest.");
 		}
 	}
-
 }

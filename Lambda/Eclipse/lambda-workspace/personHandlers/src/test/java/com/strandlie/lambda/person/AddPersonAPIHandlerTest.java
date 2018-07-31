@@ -11,7 +11,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.amazonaws.services.lambda.runtime.Context;
-import com.strandlie.lambda.addperson.TestContext;
 import com.strandlie.lambda.person.AddPersonAPIHandler;
 import com.strandlie.lambda.person.PersonRequest;
 import com.strandlie.lambda.person.PersonResponse;
@@ -25,12 +24,11 @@ public class AddPersonAPIHandlerTest {
 
     @BeforeClass
     public static void createInput() {
-        // TODO: set up your sample input object here.
         addPersonInput = new PersonRequest();
         addPersonInput.setFirstName("Marte");
         addPersonInput.setLastName("Sivesind");
-        addPersonInput.setEmail("martesivesind@gmail.com");
-        addPersonInput.setPhoneNr("99511597");
+        addPersonInput.setEmail("tull@tull.no");
+        addPersonInput.setPhoneNr("12345678");
         addPersonInput.setPictureURL("skjdla.iitjhja.hgb");
         
     }

@@ -29,7 +29,7 @@ public class DeleteItemAPIHandler extends APIHandler {
         
         try {
         	getConnection();
-        	deleteFromDatabase(id);
+        	deleteFromDatabase(APIHandler.ITEMTABLE, APIHandler.IDCOLUMN, id);
         	response.setItemIsDeleted(true);
         	response.setId(id);
         	

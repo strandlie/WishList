@@ -68,8 +68,8 @@ public abstract class APIHandler implements RequestHandler<APIRequest, APIRespon
     	statement.executeUpdate();
     }
     
-    protected void deleteFromDatabase(int id) throws SQLException {
-    	String sql = "DELETE FROM item WHERE id = ?";
+    protected void deleteFromDatabase(String tableName, String columnNameForSelection, int id) throws SQLException {
+    	String sql = prePrepareDeleteStatement(tableName, columnNameForSelection);
     	
     	statement = connection.prepareStatement(sql);
     	setInt(1, id);
@@ -89,6 +89,13 @@ public abstract class APIHandler implements RequestHandler<APIRequest, APIRespon
 		StringBuilder string = new StringBuilder();
 		string.append("UPDATE " + tableName + " ");
 		string.append("SET " + columnNameForUpdate + " = ? ");
+		string.append("WHERE " + columnNameForSelection + " = ?");
+		return string.toString();
+	}
+	
+	private String prePrepareDeleteStatement(String tableName, String columnNameForSelection) {
+		StringBuilder string = new StringBuilder();
+		string.append("DELETE FROM " + tableName + " ");
 		string.append("WHERE " + columnNameForSelection + " = ?");
 		return string.toString();
 	}

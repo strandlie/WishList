@@ -29,7 +29,7 @@ public class DeletePersonAPIHandler extends APIHandler {
         
         try {
         	getConnection();
-        	deleteFromDatabase(id);
+        	deleteFromDatabase(APIHandler.PERSONTABLE, APIHandler.IDCOLUMN, id);
         	response.setPersonIsDeleted(true);
         	response.setId(id);
         } catch (SQLException e) {

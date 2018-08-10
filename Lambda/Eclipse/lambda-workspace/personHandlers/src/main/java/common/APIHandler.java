@@ -7,17 +7,33 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.strandlie.lambda.gift.GiftRequest;
+import com.strandlie.lambda.item.ItemRequest;
+import com.strandlie.lambda.person.PersonRequest;
 
 public abstract class APIHandler implements RequestHandler<APIRequest, APIResponse> {
 	
 	public static final String PERSONTABLE = "person";
 	public static final String ITEMTABLE = "item";
+	public static final String GIFTTABLE = "gift";
 	public static final String IDCOLUMN = "id";
 	
 	protected Connection connection;
 	protected ResultSet resultSet;
 	protected PreparedStatement statement;
+	
+	private Context context;
+	
+	
+	protected void setContext(Context context) {
+		this.context = context;
+	}
+	
+	protected Context getContext() {
+		return this.context;
+	}
 	
 	protected void setStringOrNull(int parameterIndex, String string) throws SQLException {
 		if (string == null) {
@@ -37,44 +53,16 @@ public abstract class APIHandler implements RequestHandler<APIRequest, APIRespon
 		}
 	}
 	
-	protected void setInt(int parameterIndex, int value) throws SQLException {
-		statement.setInt(parameterIndex, value);
+	protected void setIntOrNull(int parameterIndex, Integer value) throws SQLException {
+		if (value == null) {
+			statement.setNull(parameterIndex, Types.INTEGER);
+		}
+		else {
+			statement.setInt(parameterIndex, value);
+		}
 	}
 	
-    protected void updateInDatabase(String tableName, String columnNameForUpdate, String newValue, String columnNameForSelection, int id) throws SQLException {
-    	String sql = prePrepareUpdateStatement(tableName, columnNameForUpdate, columnNameForSelection);
-    	
-    	statement = connection.prepareStatement(sql);
-    	setStringOrNull(1, newValue);
-    	setInt(2, id);
-    	statement.executeUpdate();
-    }
     
-    protected void updateInDatabase(String tableName, String columnNameForUpdate, int newValue, String columnNameForSelection, int id) throws SQLException {
-    	String sql = prePrepareUpdateStatement(tableName, columnNameForUpdate, columnNameForSelection);
-    	
-    	statement = connection.prepareStatement(sql);
-    	setInt(1, newValue);
-    	setInt(2, id);
-    	statement.executeUpdate();
-    }
-    
-    protected void updateInDatabase(String tableName, String columnNameForUpdate, Double newValue, String columnNameForSelection, int id) throws SQLException {
-    	String sql = prePrepareUpdateStatement(tableName, columnNameForUpdate, columnNameForSelection);
-    	
-    	statement = connection.prepareStatement(sql);
-    	setDoubleOrNull(1, newValue);
-    	setInt(2, id);
-    	statement.executeUpdate();
-    }
-    
-    protected void deleteFromDatabase(String tableName, String columnNameForSelection, int id) throws SQLException {
-    	String sql = prePrepareDeleteStatement(tableName, columnNameForSelection);
-    	
-    	statement = connection.prepareStatement(sql);
-    	setInt(1, id);
-    	statement.executeUpdate();
-    }
 	
 	protected void getConnection() throws SQLException {
 		connection = DriverManager.getConnection(
@@ -83,21 +71,6 @@ public abstract class APIHandler implements RequestHandler<APIRequest, APIRespon
 						System.getenv("DBPassword"));
 		
 		connection.setCatalog(System.getenv("DBDatabase"));
-	}
-	
-	protected String prePrepareUpdateStatement(String tableName, String columnNameForUpdate, String columnNameForSelection) {
-		StringBuilder string = new StringBuilder();
-		string.append("UPDATE " + tableName + " ");
-		string.append("SET " + columnNameForUpdate + " = ? ");
-		string.append("WHERE " + columnNameForSelection + " = ?");
-		return string.toString();
-	}
-	
-	private String prePrepareDeleteStatement(String tableName, String columnNameForSelection) {
-		StringBuilder string = new StringBuilder();
-		string.append("DELETE FROM " + tableName + " ");
-		string.append("WHERE " + columnNameForSelection + " = ?");
-		return string.toString();
 	}
 	
 	
@@ -123,5 +96,38 @@ public abstract class APIHandler implements RequestHandler<APIRequest, APIRespon
 				}
 			} catch (SQLException e) {}
 	}
-
+	
+	
+	protected static GiftRequest APIRequestIsGiftRequest(APIRequest request) {
+		try {
+			GiftRequest r = (GiftRequest) request;
+			return r;
+		}
+		catch (ClassCastException e) {
+			throw new RuntimeException("API Request: " + request.toString() + " is not" + 
+			" an GiftRequest.");
+		}
+	}
+	
+	protected static ItemRequest APIRequestIsItemRequest(APIRequest request) {
+		try {
+			ItemRequest r = (ItemRequest) request;
+			return r;
+		}
+		catch (ClassCastException e) {
+			throw new RuntimeException("API Request: " + request.toString() + " is not" + 
+			" an ItemRequest.");
+		}
+	}
+	
+	protected static PersonRequest APIRequestIsPersonRequest(APIRequest request) {
+		try {
+			PersonRequest r = (PersonRequest) request;
+			return r;
+		}
+		catch (ClassCastException e) {
+			throw new RuntimeException("API Request: " + request.toString() + " is not" + 
+			" a PersonRequest.");
+		}
+	}
 }

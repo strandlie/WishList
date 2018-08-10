@@ -7,30 +7,27 @@ import com.amazonaws.services.lambda.runtime.Context;
 import common.APIHandler;
 import common.APIRequest;
 import common.APIResponse;
+import common.GetAPIHandler;
 import exceptions.DatabaseErrorException;
 
-public class GetItemAPIHandler extends APIHandler {
+public class GetItemAPIHandler extends GetAPIHandler {
 	
 	private ItemRequest request;
+	private ItemResponse response;
 
 	@Override
 	public APIResponse handleRequest(APIRequest request, Context context) {
-		context.getLogger().log("Received retreive request: \n" + request.toString());
 		
 		this.request = APIRequestIsItemRequest(request);
-		ItemResponse response = new ItemResponse();
+		this.response = new ItemResponse();
+		setContext(context);
 		
-		Integer id = this.request.getId();
 		
 		try {
-			getConnection();
-			String sql = "SELECT * FROM " + APIHandler.ITEMTABLE + " WHERE ID = ?";
-			statement = connection.prepareStatement(sql);
-			statement.setInt(1, id);
-			resultSet = statement.executeQuery();
-			
+			super.handleRequest(this.request, this.response, APIHandler.ITEMTABLE);
 			if (! resultSet.next()) {
-				connection.close();
+				this.response.setId(this.request.getId());
+				this.response.setErrorMessage("No such object");
 			}
 			else {
 				response.setTitle(resultSet.getString("title"));
@@ -40,26 +37,13 @@ public class GetItemAPIHandler extends APIHandler {
 				response.setPrice(resultSet.getDouble("price"));
 			}
 		} catch (SQLException e) {
-			context.getLogger().log("Database error: " + e.toString());
-			throw new DatabaseErrorException("Could not retrieve item with id: " + Integer.toString(id), e.toString());
+			throw new DatabaseErrorException("Could not retrieve item with id: " + this.request.getId().toString(), e.toString());
 			
 		} finally {
 			closeDatabaseConnection();
 		}
 		
-		context.getLogger().log("\nRetrieve request successfully processed\n");
-		return response;
-	}
-
-
-	private ItemRequest APIRequestIsItemRequest(APIRequest request) {
-		try {
-			ItemRequest r = (ItemRequest) request;
-			return r;
-		}
-		catch (ClassCastException e) {
-			throw new RuntimeException("API Request: " + request.toString() + " is not" + 
-			" an ItemRequest.");
-		}
+		logEnd();
+		return this.response;
 	}
 }

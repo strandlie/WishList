@@ -7,50 +7,31 @@ import com.amazonaws.services.lambda.runtime.Context;
 import common.APIHandler;
 import common.APIRequest;
 import common.APIResponse;
+import common.DeleteAPIHandler;
 import exceptions.DatabaseErrorException;
-import exceptions.InvalidUpdateRequestFormatException;
 
-public class DeleteItemAPIHandler extends APIHandler {
+public class DeleteItemAPIHandler extends DeleteAPIHandler {
 	
 	private ItemRequest request;
+	private ItemResponse response;
 
 	@Override
 	public APIResponse handleRequest(APIRequest request, Context context) {
-		context.getLogger().log("Received delete request: \n" + request.toString());
 		
 		this.request = APIRequestIsItemRequest(request);
-		ItemResponse response = new ItemResponse();
-		response.setItemIsDeleted(false);
-		
-		Integer id = this.request.getId();
-        if (id == null) {
-        	throw new InvalidUpdateRequestFormatException("Invalid ID for delete: " + request.getId().toString());
-        }
+		this.response = new ItemResponse();
+		setContext(context);
         
         try {
-        	getConnection();
-        	deleteFromDatabase(APIHandler.ITEMTABLE, APIHandler.IDCOLUMN, id);
-        	response.setItemIsDeleted(true);
-        	response.setId(id);
+        	super.handleRequest(this.request, this.response, APIHandler.ITEMTABLE, APIHandler.IDCOLUMN);
+        	this.response.setItemIsDeleted(true);
         	
         } catch (SQLException e) {
-        	throw new DatabaseErrorException("Could not create connection and delete", e.toString());
+        	throw new DatabaseErrorException("Could not create connection and delete item", e.toString());
         } finally {
         	closeDatabaseConnection();
         }
-		context.getLogger().log("\nDelete successfully processed");
-		return response;
+		return this.response;
 	}
-
 	
-	private ItemRequest APIRequestIsItemRequest(APIRequest request) {
-		try {
-			ItemRequest r = (ItemRequest) request;
-			return r;
-		}
-		catch (ClassCastException e) {
-			throw new RuntimeException("API Request: " + request.toString() + " is not" + 
-			" an ItemRequest.");
-		}
-	}
 }

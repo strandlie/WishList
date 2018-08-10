@@ -7,50 +7,29 @@ import com.amazonaws.services.lambda.runtime.Context;
 import common.APIHandler;
 import common.APIRequest;
 import common.APIResponse;
+import common.DeleteAPIHandler;
 import exceptions.DatabaseErrorException;
-import exceptions.InvalidUpdateRequestFormatException;
 
-public class DeletePersonAPIHandler extends APIHandler {
+public class DeletePersonAPIHandler extends DeleteAPIHandler {
 	
 	private PersonRequest request;
+	private PersonResponse response;
 
     @Override
     public APIResponse handleRequest(APIRequest request, Context context) {
-        context.getLogger().log("Received delete request: \n" + request.toString());
         
         this.request = APIRequestIsPersonRequest(request);
-        PersonResponse response = new PersonResponse();
-        response.setPersonIsDeleted(false);
-        
-        Integer id = this.request.getId();
-        if (id == null) {
-        	throw new InvalidUpdateRequestFormatException("Invalid ID for delete: " + request.getId().toString());
-        }
+        this.response = new PersonResponse();
+        setContext(context);
         
         try {
-        	getConnection();
-        	deleteFromDatabase(APIHandler.PERSONTABLE, APIHandler.IDCOLUMN, id);
+        	super.handleRequest(this.request, this.response, APIHandler.PERSONTABLE, APIHandler.IDCOLUMN);
         	response.setPersonIsDeleted(true);
-        	response.setId(id);
         } catch (SQLException e) {
         	throw new DatabaseErrorException("Could not create connection and delete", e.toString());
         } finally {
         	closeDatabaseConnection();
         }
-        context.getLogger().log("\nDelete successfully processed");
-        return response;
+        return this.response;
     }
-    
-    
-	private PersonRequest APIRequestIsPersonRequest(APIRequest request) {
-		try {
-			PersonRequest r = (PersonRequest) request;
-			return r;
-		}
-		catch (ClassCastException e) {
-			throw new RuntimeException("API Request: " + request.toString() + " is not" + 
-			" a PersonRequest.");
-		}
-	}
-
 }

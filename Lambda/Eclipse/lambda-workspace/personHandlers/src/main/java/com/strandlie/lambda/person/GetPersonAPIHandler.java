@@ -7,30 +7,28 @@ import com.amazonaws.services.lambda.runtime.Context;
 import common.APIHandler;
 import common.APIRequest;
 import common.APIResponse;
+import common.GetAPIHandler;
 import exceptions.DatabaseErrorException;
 
-public class GetPersonAPIHandler extends APIHandler {
+public class GetPersonAPIHandler extends GetAPIHandler {
 	
 	private PersonRequest request;
+	private PersonResponse response;
 
 	@Override
 	public APIResponse handleRequest(APIRequest request, Context context) {
-		context.getLogger().log("Received retreive request: \n" + request.toString());
 		
 		this.request = APIRequestIsPersonRequest(request);
-		PersonResponse response = new PersonResponse();
+		this.response = new PersonResponse();
+		setContext(context);
 		
 		Integer id = this.request.getId();
 		
 		try {
-			getConnection();
-			String sql = "SELECT * FROM " + APIHandler.PERSONTABLE + " WHERE id = ?";
-			statement = connection.prepareStatement(sql);
-			statement.setInt(1, id);
-			resultSet = statement.executeQuery();
-			
+			super.handleRequest(this.request, this.response, APIHandler.PERSONTABLE);
 			if (! resultSet.next()) {
-				connection.close();
+				this.response.setId(this.request.getId());
+				this.response.setErrorMessage("No such object");
 			}
 			else {
 				response.setFirstName(resultSet.getString("firstName"));
@@ -41,26 +39,12 @@ public class GetPersonAPIHandler extends APIHandler {
 			}
 			
 		} catch (SQLException e) {
-			context.getLogger().log("Database error: " + e.toString());
 			throw new DatabaseErrorException("Could not retrieve person with id: " + Integer.toString(id), e.toString());
 		} finally {
 			closeDatabaseConnection();
 		}
-		context.getLogger().log("\nRetrieve request successfully processed\n");
+		
+		logEnd();
 		return response;
 	}
-	
-	
-	private PersonRequest APIRequestIsPersonRequest(APIRequest request) {
-		try {
-			PersonRequest r = (PersonRequest) request;
-			return r;
-		}
-		catch (ClassCastException e) {
-			throw new RuntimeException("API Request: " + request.toString() + " is not" + 
-			" a PersonRequest.");
-		}
-	}
-
-
 }

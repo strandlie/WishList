@@ -3,7 +3,8 @@ package common;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class APIResponse {
+
+public class APIResponse {
 	
 	private int id;
 	private String errorMessage;
@@ -31,5 +32,5 @@ public abstract class APIResponse {
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
-
+	
 }

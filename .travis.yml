@@ -4,7 +4,7 @@ jdk:
 sudo: false
 script:
     cd Lambda/Eclipse/lambda-workspace/
-    mvn test -f personHandlers/pom.xml $MAVEN_CLI_OPTS
+    mvn test -f personHandlers/pom.xm
 notifications:
     email: false
 

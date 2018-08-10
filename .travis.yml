@@ -4,7 +4,8 @@ jdk:
 sudo: false
 script:
     cd Lambda/Eclipse/lambda-workspace/
-    mvn test -f personHandlers/pom.xml
+    mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+    mvn test -f personHandlers/pom.xml -B
 notifications:
     email: false
 

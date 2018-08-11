@@ -39,6 +39,7 @@ public class DeleteWishAPIHandlerTest {
 			Statement statement = connection.createStatement();
 			
 			statement.executeUpdate("DROP TABLE IF EXISTS wish");
+			statement.executeUpdate("DROP TABLE IF EXISTS gift");
 			statement.executeUpdate("DROP TABLE IF EXISTS person");
 			statement.executeUpdate("DROP TABLE IF EXISTS item");
 			

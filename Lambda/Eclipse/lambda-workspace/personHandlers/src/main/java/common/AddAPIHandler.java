@@ -60,6 +60,7 @@ public abstract class AddAPIHandler extends APIHandler {
 					break;
 				case "giverID":
 				case "recepientID":
+				case "wisherID":
 				case "itemID":
 				case "quantity":
 					setIntOrNull(i+1, Integer.parseInt(fields.get(fieldName)));

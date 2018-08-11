@@ -12,12 +12,14 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.strandlie.lambda.gift.GiftRequest;
 import com.strandlie.lambda.item.ItemRequest;
 import com.strandlie.lambda.person.PersonRequest;
+import com.strandlie.lambda.wish.WishRequest;
 
 public abstract class APIHandler implements RequestHandler<APIRequest, APIResponse> {
 	
-	public static final String PERSONTABLE = "person";
-	public static final String ITEMTABLE = "item";
-	public static final String GIFTTABLE = "gift";
+	protected static final String PERSONTABLE = "person";
+	protected static final String ITEMTABLE = "item";
+	protected static final String GIFTTABLE = "gift";
+	protected static final String WISHTABLE = "wish";
 	public static final String IDCOLUMN = "id";
 	
 	protected Connection connection;
@@ -65,12 +67,22 @@ public abstract class APIHandler implements RequestHandler<APIRequest, APIRespon
     
 	
 	protected void getConnection() throws SQLException {
+		if (connection == null) {
+			createConnection();
+		}
+		else if (connection.isClosed()) {
+			createConnection();
+		}
+	}
+	
+	private void createConnection() throws SQLException {
 		connection = DriverManager.getConnection(
 						"jdbc:" + System.getenv("DBDriver") + ":" + System.getenv("DBPath"), 
 						System.getenv("DBUsername"), 
 						System.getenv("DBPassword"));
 		
 		connection.setCatalog(System.getenv("DBDatabase"));
+		
 	}
 	
 	
@@ -96,7 +108,6 @@ public abstract class APIHandler implements RequestHandler<APIRequest, APIRespon
 				}
 			} catch (SQLException e) {}
 	}
-	
 	
 	protected static GiftRequest APIRequestIsGiftRequest(APIRequest request) {
 		try {
@@ -128,6 +139,16 @@ public abstract class APIHandler implements RequestHandler<APIRequest, APIRespon
 		catch (ClassCastException e) {
 			throw new RuntimeException("API Request: " + request.toString() + " is not" + 
 			" a PersonRequest.");
+		}
+	}
+	
+	protected static WishRequest APIRequestIsWishRequest(APIRequest request) {
+		try {
+			WishRequest r = (WishRequest) request;
+			return r;
+		} catch (ClassCastException e) {
+			throw new RuntimeException("API Request: " + request.toString() + " is not" + 
+			" a WishRequest.");
 		}
 	}
 }

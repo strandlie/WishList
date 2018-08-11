@@ -1,4 +1,4 @@
-package com.strandlie.lambda.gift;
+package com.strandlie.lambda.wish;
 
 import com.amazonaws.services.lambda.runtime.Context;
 
@@ -7,12 +7,11 @@ import common.APIRequest;
 import common.APIResponse;
 import common.UpdateAPIHandler;
 
-public class UpdateGiftAPIHandler extends UpdateAPIHandler {
+public class UpdateWishAPIHandler extends UpdateAPIHandler {
 	
-	private GiftRequest request;
-	private GiftResponse response;
+	private WishRequest request;
+	private WishResponse response;
 
-	
 	/**
 	 * This method is assuming that by the time the request reaches this point
 	 * the IDs are already validated client-side
@@ -20,12 +19,12 @@ public class UpdateGiftAPIHandler extends UpdateAPIHandler {
 	@Override
 	public APIResponse handleRequest(APIRequest request, Context context) {
 		
-		this.request = APIRequestIsGiftRequest(request);
-		this.response = new GiftResponse();
+		this.request = APIRequestIsWishRequest(request);
+		this.response = new WishResponse();
 		setContext(context);
 		
-		super.handleRequest(this.request, this.response, APIHandler.GIFTTABLE);
-		response.setGiftIsUpdated(true);
+		super.handleRequest(this.request, this.response, APIHandler.WISHTABLE);
+		this.response.setWishIsUpdated(true);
 		
 		return this.response;
 	}

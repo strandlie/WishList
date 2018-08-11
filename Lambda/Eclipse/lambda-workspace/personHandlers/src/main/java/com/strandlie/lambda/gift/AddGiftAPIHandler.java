@@ -16,9 +16,16 @@ public class AddGiftAPIHandler extends AddAPIHandler {
 	private GiftRequest request;
 	private GiftResponse response;
 
+	
+	/**
+	 * This method is assuming that by the time the request reaches this point
+	 * the IDs are already validated client-side
+	 */
 	@Override
 	public APIResponse handleRequest(APIRequest request, Context context) {
         
+		
+		//TODO: Needs to add ability to specify which wish, if any, a gift fulfils
         this.request = APIRequestIsGiftRequest(request);
         this.response = new GiftResponse();
         setContext(context);

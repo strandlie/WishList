@@ -1,4 +1,4 @@
-package com.strandlie.lambda.gift;
+package com.strandlie.lambda.wish;
 
 import java.sql.SQLException;
 
@@ -10,10 +10,10 @@ import common.APIResponse;
 import common.DeleteAPIHandler;
 import exceptions.DatabaseErrorException;
 
-public class DeleteGiftAPIHandler extends DeleteAPIHandler {
+public class DeleteWishAPIHandler extends DeleteAPIHandler {
 	
-	private GiftRequest request;
-	private GiftResponse response;
+	private WishRequest request;
+	private WishResponse response;
 
 	/**
 	 * This method is assuming that by the time the request reaches this point
@@ -22,23 +22,19 @@ public class DeleteGiftAPIHandler extends DeleteAPIHandler {
 	@Override
 	public APIResponse handleRequest(APIRequest request, Context context) {
 		
-		this.request = APIRequestIsGiftRequest(request);
-		this.response = new GiftResponse();
+		this.request = APIRequestIsWishRequest(request);
+		this.response = new WishResponse();
 		setContext(context);
 		
 		try {
-			super.handleRequest(this.request, this.response, APIHandler.GIFTTABLE, APIHandler.IDCOLUMN);
-			response.setGiftIsDeleted(true);
-			
-		} catch (SQLException e) {
-			throw new DatabaseErrorException("Could not create connection and delete gift", e.toString());
+			super.handleRequest(this.request, this.response, APIHandler.WISHTABLE, APIHandler.IDCOLUMN);
+			this.response.setWishIsDeleted(true);
+		} catch (SQLException e){
+			throw new DatabaseErrorException("Could not create connection and delete", e.toString());
 		} finally {
 			closeDatabaseConnection();
 		}
-		return response;
-		
-		
+		return this.response;
 	}
-
 
 }

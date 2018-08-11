@@ -20,11 +20,7 @@ public class GiftRequest extends APIRequest {
 	}
 	
 	public Integer getGiverID() {
-		String temp_id = this.fields().getOrDefault("giverID", null);
-		if (temp_id == null) {
-			return null;
-		}
-		return Integer.parseInt(temp_id);
+		return getIntFromMap("giverID");
 	}
 	
 	
@@ -33,11 +29,7 @@ public class GiftRequest extends APIRequest {
 	}
 	
 	public Integer getRecepientID() {
-		String temp_id = this.fields().getOrDefault("recepientID", null);
-		if (temp_id == null) {
-			return null;
-		}
-		return Integer.parseInt(temp_id);
+		return getIntFromMap("recepientID");
 	}
 	
 	public void setItemID(int id) {
@@ -45,11 +37,7 @@ public class GiftRequest extends APIRequest {
 	}
 	
 	public Integer getItemID() {
-		String temp_id = this.fields().getOrDefault("itemID", null);
-		if (temp_id == null) {
-			return null;
-		}
-		return Integer.parseInt(temp_id);
+		return getIntFromMap("itemID");
 	
 	}
 	
@@ -58,11 +46,7 @@ public class GiftRequest extends APIRequest {
 	}
 	
 	public Integer getQuantity() {
-		String temp_quant = this.fields().getOrDefault("quantity", null);
-		if (temp_quant == null) {
-			return null;
-		}
-		return Integer.parseInt(temp_quant);
+		return getIntFromMap("quantity");
 	}
 	
 	

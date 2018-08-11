@@ -17,6 +17,7 @@ public abstract class GetAPIHandler extends APIHandler {
 		
 		getConnection();
 		retrieveFromDatabaseUsingID(tableName, APIHandler.IDCOLUMN, id);
+		response.setId(id);
 	}
 	
 	protected void logEnd() {

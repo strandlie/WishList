@@ -42,5 +42,14 @@ public abstract class APIRequest {
 	public Map<String, String> getNotNullFields() {
 		return this.fields();
 	}
+	
+	protected Integer getIntFromMap(String key) {
+		String temp_string = this.fields().getOrDefault(key, null);
+		if (temp_string == null) {
+			return null;
+		}
+		return Integer.parseInt(temp_string);
+		
+	}
 
 }

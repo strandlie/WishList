@@ -22,8 +22,6 @@ public class GetPersonAPIHandler extends GetAPIHandler {
 		this.response = new PersonResponse();
 		setContext(context);
 		
-		Integer id = this.request.getId();
-		
 		try {
 			super.handleRequest(this.request, this.response, APIHandler.PERSONTABLE);
 			if (! resultSet.next()) {
@@ -31,15 +29,15 @@ public class GetPersonAPIHandler extends GetAPIHandler {
 				this.response.setErrorMessage("No such object");
 			}
 			else {
-				response.setFirstName(resultSet.getString("firstName"));
-				response.setLastName(resultSet.getString("lastName"));
-				response.setEmail(resultSet.getString("email"));
-				response.setPhoneNr(resultSet.getString("phoneNr"));
-				response.setPictureURL(resultSet.getString("pictureURL"));
+				this.response.setFirstName(resultSet.getString("firstName"));
+				this.response.setLastName(resultSet.getString("lastName"));
+				this.response.setEmail(resultSet.getString("email"));
+				this.response.setPhoneNr(resultSet.getString("phoneNr"));
+				this.response.setPictureURL(resultSet.getString("pictureURL"));
 			}
 			
 		} catch (SQLException e) {
-			throw new DatabaseErrorException("Could not retrieve person with id: " + Integer.toString(id), e.toString());
+			throw new DatabaseErrorException("Could not retrieve person with id: " + this.request.getId().toString(), e.toString());
 		} finally {
 			closeDatabaseConnection();
 		}

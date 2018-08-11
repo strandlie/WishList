@@ -1,4 +1,4 @@
-package com.strandlie.lambda.gift;
+package com.strandlie.lambda.wish;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -21,17 +22,17 @@ import common.APIResponse;
 /**
  * A simple test harness for locally invoking your Lambda function handler.
  */
-public class AddGiftAPIHandlerTest {
+public class GetWishAPIHandlerTest {
 
-    private static GiftRequest addGiftInput;
+    private static WishRequest initialWishInput;
+    private static WishRequest getWishInput;
     
-    private static PersonRequest giverInput;
-    private static PersonRequest recepientInput;
+    private static PersonRequest wisherInput;
     private static ItemRequest itemInput;
+
     
-    
-    @BeforeClass
-    public static void createDatabase() {
+    @Before
+    public void createDatabase() {
 		Connection connection;
 		try {
 			connection = DriverManager.getConnection("jdbc:" + System.getenv("DBDriver") + ":" + System.getenv("DBPath"), System.getenv("DBUsername"), System.getenv("DBPassword"));
@@ -39,14 +40,12 @@ public class AddGiftAPIHandlerTest {
 			Statement statement = connection.createStatement();
 			
 			statement.executeUpdate("DROP TABLE IF EXISTS wish");
-			statement.executeUpdate("DROP TABLE IF EXISTS gift");
 			statement.executeUpdate("DROP TABLE IF EXISTS person");
 			statement.executeUpdate("DROP TABLE IF EXISTS item");
 			
 			
 			statement.executeUpdate("CREATE TABLE item(" + 
-					"id INTEGER PRIMARY KEY AUTO_INCREMENT," +
-					"title VARCHAR(200)," + 
+					"id INTEGER PRIMARY KEY AUTO_INCREMENT," + "title VARCHAR(200)," + 
 					"description MEDIUMTEXT," + 
 					"pictureURL MEDIUMTEXT," +
 					"websiteURL MEDIUMTEXT," +
@@ -60,18 +59,14 @@ public class AddGiftAPIHandlerTest {
 					"phoneNr VARCHAR(20)," +
 					"pictureURL VARCHAR(300)" + 
 					");");
-			statement.executeUpdate("CREATE TABLE gift(" + 
+			statement.executeUpdate("CREATE TABLE wish(" + 
 					"id INTEGER PRIMARY KEY AUTO_INCREMENT, " + 
-					"giverID INTEGER, " + 
-					"recepientID INTEGER, " +
+					"wisherID INTEGER, " + 
 					"itemID INTEGER, " + 
 					"quantity INTEGER, " + 
-					"CONSTRAINT giverID_FK FOREIGN KEY (giverID) REFERENCES person(id) " + 
+					"CONSTRAINT wisherID_FK FOREIGN KEY (wisherID) REFERENCES person(id) " + 
 						"ON DELETE SET NULL " + 
 					    "ON UPDATE CASCADE, " +
-					 "CONSTRAINT recepientID_FK FOREIGN KEY (recepientID) REFERENCES person(id) " + 
-					    "ON DELETE SET NULL " + 
-					    "ON UPDATE CASCADE, " + 
 					"CONSTRAINT itemID_FK FOREIGN KEY (itemID) REFERENCES item(id) " + 
 					    "ON DELETE CASCADE " + 
 					    "ON UPDATE CASCADE" + 
@@ -82,44 +77,43 @@ public class AddGiftAPIHandlerTest {
 			e.printStackTrace();
 		}
     }
-
+    
     @BeforeClass
     public static void createInput() throws IOException {
-    	giverInput = new PersonRequest();
-    	giverInput.setFirstName("Giver");
-    	giverInput.setLastName("Person");
-    	
-    	recepientInput = new PersonRequest();
-    	recepientInput.setFirstName("Recepient");
-    	recepientInput.setLastName("Person");
+    	wisherInput = new PersonRequest();
+    	wisherInput.setFirstName("Wisher");
+    	wisherInput.setLastName("Person");
     	
     	itemInput = new ItemRequest();
-    	itemInput.setTitle("Bathing Suit");
-    	itemInput.setDescription("This amazing feature can do anything");
+    	itemInput.setTitle("Coffee Lake");
     	
-    	addGiftInput = new GiftRequest();
-    	addGiftInput.setQuantity(1);
+    	initialWishInput = new WishRequest();
+    	initialWishInput.setQuantity(1);
     	
+    	getWishInput = new WishRequest();
     }
+    
     
     private void setupInitialDatabase(Context context) {
     	AddPersonAPIHandler personHandler = new AddPersonAPIHandler();
     	AddItemAPIHandler itemHandler = new AddItemAPIHandler();
+    	AddWishAPIHandler addWishHandler = new AddWishAPIHandler();
     	
-    	APIResponse giverResponse = personHandler.handleRequest(giverInput, context);
-    	APIResponse recepientResponse = personHandler.handleRequest(recepientInput, context);
+    	APIResponse wisherResponse = personHandler.handleRequest(wisherInput, context);
     	APIResponse itemResponse = itemHandler.handleRequest(itemInput, context);
     	
     	// Set remaining input-fields here
-    	addGiftInput.setGiverID(giverResponse.getId());
-    	addGiftInput.setRecepientID(recepientResponse.getId());
-    	addGiftInput.setItemID(itemResponse.getId());
+    	initialWishInput.setWisherID(wisherResponse.getId());
+    	initialWishInput.setItemID(itemResponse.getId());
+    	
+    	APIResponse addWishOutput = addWishHandler.handleRequest(initialWishInput, context);
+    	getWishInput.setId(addWishOutput.getId());
     }
 
     private Context createContext() {
         TestContext ctx = new TestContext();
 
-        ctx.setFunctionName("addGift");
+        ctx.setFunctionName("getWish");
         ctx.setMemoryLimitInMB(128);
         ctx.setRemainingTimeInMillis(15000);
 
@@ -127,15 +121,15 @@ public class AddGiftAPIHandlerTest {
     }
 
     @Test
-    public void testaddGiftAPIHandler() {
-        AddGiftAPIHandler handler = new AddGiftAPIHandler();
+    public void testGetWishAPIHandler() {
+        GetWishAPIHandler handler = new GetWishAPIHandler();
         Context ctx = createContext();
         setupInitialDatabase(ctx);
+
+        WishResponse output = (WishResponse) handler.handleRequest(getWishInput, ctx);
         
-        GiftResponse output = (GiftResponse) handler.handleRequest(addGiftInput, ctx);
-       
-        
-        Assert.assertEquals(true, output.getGiftIsAdded());
-        Assert.assertEquals(1, output.getId());
+        Assert.assertEquals(initialWishInput.getWisherID().intValue(), output.getWisherID());
+        Assert.assertEquals(initialWishInput.getItemID().intValue(), output.getItemID());
+        Assert.assertEquals(initialWishInput.getQuantity().intValue(), output.getQuantity());
     }
 }

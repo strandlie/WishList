@@ -1,4 +1,4 @@
-package com.strandlie.lambda.gift;
+package com.strandlie.lambda.wish;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -21,17 +22,19 @@ import common.APIResponse;
 /**
  * A simple test harness for locally invoking your Lambda function handler.
  */
-public class AddGiftAPIHandlerTest {
+public class UpdateWishAPIHandlerTest {
 
-    private static GiftRequest addGiftInput;
+    private static WishRequest initialWishInput;
+    private static WishRequest updateWishInput;
     
-    private static PersonRequest giverInput;
-    private static PersonRequest recepientInput;
-    private static ItemRequest itemInput;
+    private static PersonRequest initialWisherInput;
+    private static ItemRequest initialItemInput;
     
+    private static PersonRequest updateWisherInput;
+    private static ItemRequest updateItemInput;
     
-    @BeforeClass
-    public static void createDatabase() {
+    @Before
+    public void createDatabase() {
 		Connection connection;
 		try {
 			connection = DriverManager.getConnection("jdbc:" + System.getenv("DBDriver") + ":" + System.getenv("DBPath"), System.getenv("DBUsername"), System.getenv("DBPassword"));
@@ -39,14 +42,12 @@ public class AddGiftAPIHandlerTest {
 			Statement statement = connection.createStatement();
 			
 			statement.executeUpdate("DROP TABLE IF EXISTS wish");
-			statement.executeUpdate("DROP TABLE IF EXISTS gift");
 			statement.executeUpdate("DROP TABLE IF EXISTS person");
 			statement.executeUpdate("DROP TABLE IF EXISTS item");
 			
 			
 			statement.executeUpdate("CREATE TABLE item(" + 
-					"id INTEGER PRIMARY KEY AUTO_INCREMENT," +
-					"title VARCHAR(200)," + 
+					"id INTEGER PRIMARY KEY AUTO_INCREMENT," + "title VARCHAR(200)," + 
 					"description MEDIUMTEXT," + 
 					"pictureURL MEDIUMTEXT," +
 					"websiteURL MEDIUMTEXT," +
@@ -60,18 +61,14 @@ public class AddGiftAPIHandlerTest {
 					"phoneNr VARCHAR(20)," +
 					"pictureURL VARCHAR(300)" + 
 					");");
-			statement.executeUpdate("CREATE TABLE gift(" + 
+			statement.executeUpdate("CREATE TABLE wish(" + 
 					"id INTEGER PRIMARY KEY AUTO_INCREMENT, " + 
-					"giverID INTEGER, " + 
-					"recepientID INTEGER, " +
+					"wisherID INTEGER, " + 
 					"itemID INTEGER, " + 
 					"quantity INTEGER, " + 
-					"CONSTRAINT giverID_FK FOREIGN KEY (giverID) REFERENCES person(id) " + 
+					"CONSTRAINT wisherID_FK FOREIGN KEY (wisherID) REFERENCES person(id) " + 
 						"ON DELETE SET NULL " + 
 					    "ON UPDATE CASCADE, " +
-					 "CONSTRAINT recepientID_FK FOREIGN KEY (recepientID) REFERENCES person(id) " + 
-					    "ON DELETE SET NULL " + 
-					    "ON UPDATE CASCADE, " + 
 					"CONSTRAINT itemID_FK FOREIGN KEY (itemID) REFERENCES item(id) " + 
 					    "ON DELETE CASCADE " + 
 					    "ON UPDATE CASCADE" + 
@@ -85,41 +82,54 @@ public class AddGiftAPIHandlerTest {
 
     @BeforeClass
     public static void createInput() throws IOException {
-    	giverInput = new PersonRequest();
-    	giverInput.setFirstName("Giver");
-    	giverInput.setLastName("Person");
+    	initialWisherInput = new PersonRequest();
+    	initialWisherInput.setFirstName("Wisher");
+    	initialWisherInput.setLastName("Person");
     	
-    	recepientInput = new PersonRequest();
-    	recepientInput.setFirstName("Recepient");
-    	recepientInput.setLastName("Person");
+    	initialItemInput = new ItemRequest();
+    	initialItemInput.setTitle("Coffee Lake");
     	
-    	itemInput = new ItemRequest();
-    	itemInput.setTitle("Bathing Suit");
-    	itemInput.setDescription("This amazing feature can do anything");
+    	updateWisherInput = new PersonRequest();
+    	updateWisherInput.setFirstName("New Wisher");
+    	updateWisherInput.setLastName("Person");
     	
-    	addGiftInput = new GiftRequest();
-    	addGiftInput.setQuantity(1);
+    	updateItemInput = new ItemRequest();
+    	updateItemInput.setTitle("Kaby Lake");
     	
+    	initialWishInput = new WishRequest();
+    	initialWishInput.setQuantity(2);
+    	
+    	updateWishInput = new WishRequest();
+    	updateWishInput.setQuantity(3);
     }
     
     private void setupInitialDatabase(Context context) {
     	AddPersonAPIHandler personHandler = new AddPersonAPIHandler();
     	AddItemAPIHandler itemHandler = new AddItemAPIHandler();
+    	AddWishAPIHandler addWishHandler = new AddWishAPIHandler();
     	
-    	APIResponse giverResponse = personHandler.handleRequest(giverInput, context);
-    	APIResponse recepientResponse = personHandler.handleRequest(recepientInput, context);
-    	APIResponse itemResponse = itemHandler.handleRequest(itemInput, context);
+    	APIResponse initialWisherResponse = personHandler.handleRequest(initialWisherInput, context);
+    	APIResponse initialItemResponse = itemHandler.handleRequest(initialItemInput, context);
+        
+    	
+    	APIResponse updateWisherResponse = personHandler.handleRequest(updateWisherInput, context);
+    	APIResponse updateItemResponse = itemHandler.handleRequest(updateItemInput, context);
     	
     	// Set remaining input-fields here
-    	addGiftInput.setGiverID(giverResponse.getId());
-    	addGiftInput.setRecepientID(recepientResponse.getId());
-    	addGiftInput.setItemID(itemResponse.getId());
+    	initialWishInput.setWisherID(initialWisherResponse.getId());
+    	initialWishInput.setItemID(initialItemResponse.getId());
+    	
+    	updateWishInput.setWisherID(updateWisherResponse.getId());
+    	updateWishInput.setItemID(updateItemResponse.getId());
+    	
+    	APIResponse addWishOutput = addWishHandler.handleRequest(initialWishInput, context);
+    	updateWishInput.setId(addWishOutput.getId());
     }
 
     private Context createContext() {
         TestContext ctx = new TestContext();
 
-        ctx.setFunctionName("addGift");
+        ctx.setFunctionName("updateWish");
         ctx.setMemoryLimitInMB(128);
         ctx.setRemainingTimeInMillis(15000);
 
@@ -127,15 +137,15 @@ public class AddGiftAPIHandlerTest {
     }
 
     @Test
-    public void testaddGiftAPIHandler() {
-        AddGiftAPIHandler handler = new AddGiftAPIHandler();
+    public void testUpdateWishAPIHandler() {
+        UpdateWishAPIHandler updateWishHandler = new UpdateWishAPIHandler();
         Context ctx = createContext();
         setupInitialDatabase(ctx);
         
-        GiftResponse output = (GiftResponse) handler.handleRequest(addGiftInput, ctx);
-       
+        WishResponse updateWishOutput = (WishResponse) updateWishHandler.handleRequest(updateWishInput, ctx);
         
-        Assert.assertEquals(true, output.getGiftIsAdded());
-        Assert.assertEquals(1, output.getId());
+        Assert.assertEquals(1, updateWishOutput.getId());
+        Assert.assertTrue(updateWishOutput.getWishIsUpdated());
+
     }
 }

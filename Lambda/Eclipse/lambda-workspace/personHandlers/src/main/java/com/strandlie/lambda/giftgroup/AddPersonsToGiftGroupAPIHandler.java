@@ -64,7 +64,7 @@ public class AddPersonsToGiftGroupAPIHandler extends APIHandler {
 			closeDatabaseConnection();
 		}
 		
-		getContext().getLogger().log("\nRetrieve request successfully processed\n");
+		getContext().getLogger().log("\nAdd request successfully processed\n");
 		getContext().getLogger().log("\n################\n");
 		
 		return this.response;

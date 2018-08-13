@@ -22,6 +22,7 @@ public abstract class DeleteAPIHandler extends APIHandler {
 		response.setId(id);
         	
 		getContext().getLogger().log("\nDelete successfully processed");
+		getContext().getLogger().log("\n################\n");
 		
 	}
 	

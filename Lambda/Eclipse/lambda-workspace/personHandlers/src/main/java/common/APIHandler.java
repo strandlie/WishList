@@ -10,6 +10,7 @@ import java.sql.Types;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.strandlie.lambda.gift.GiftRequest;
+import com.strandlie.lambda.giftgroup.GiftGroupRequest;
 import com.strandlie.lambda.item.ItemRequest;
 import com.strandlie.lambda.person.PersonRequest;
 import com.strandlie.lambda.wish.WishRequest;
@@ -20,7 +21,12 @@ public abstract class APIHandler implements RequestHandler<APIRequest, APIRespon
 	protected static final String ITEMTABLE = "item";
 	protected static final String GIFTTABLE = "gift";
 	protected static final String WISHTABLE = "wish";
-	public static final String IDCOLUMN = "id";
+	protected static final String GIFTGROUPTABLE = "giftGroup";
+	protected static final String PERSONINGIFTGROUPTABLE = "personInGiftGroup";
+	
+	protected static final String IDCOLUMN = "id";
+	protected static final String PERSONIDCOLUMN = "personID";
+	protected static final String GROUPIDCOLUMN = "groupID";
 	
 	protected Connection connection;
 	protected ResultSet resultSet;
@@ -145,6 +151,16 @@ public abstract class APIHandler implements RequestHandler<APIRequest, APIRespon
 	protected static WishRequest APIRequestIsWishRequest(APIRequest request) {
 		try {
 			WishRequest r = (WishRequest) request;
+			return r;
+		} catch (ClassCastException e) {
+			throw new RuntimeException("API Request: " + request.toString() + " is not" + 
+			" a WishRequest.");
+		}
+	}
+	
+	protected static GiftGroupRequest APIRequestIsGiftGroupRequest(APIRequest request) {
+		try {
+			GiftGroupRequest r = (GiftGroupRequest) request;
 			return r;
 		} catch (ClassCastException e) {
 			throw new RuntimeException("API Request: " + request.toString() + " is not" + 

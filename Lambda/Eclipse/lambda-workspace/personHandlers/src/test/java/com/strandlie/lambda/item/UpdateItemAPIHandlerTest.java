@@ -72,7 +72,7 @@ public class UpdateItemAPIHandlerTest {
     private Context createContext() {
         TestContext ctx = new TestContext();
 
-        ctx.setFunctionName("updatePerson");
+        ctx.setFunctionName("updateItem");
         ctx.setMemoryLimitInMB(128);
         ctx.setRemainingTimeInMillis(15000);
 

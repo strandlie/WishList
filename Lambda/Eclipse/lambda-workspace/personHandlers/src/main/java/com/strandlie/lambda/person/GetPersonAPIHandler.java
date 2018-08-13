@@ -43,6 +43,6 @@ public class GetPersonAPIHandler extends GetAPIHandler {
 		}
 		
 		logEnd();
-		return response;
+		return this.response;
 	}
 }

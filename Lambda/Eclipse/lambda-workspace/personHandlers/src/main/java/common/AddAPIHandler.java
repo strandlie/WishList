@@ -16,9 +16,10 @@ public abstract class AddAPIHandler extends APIHandler {
 		response.setId(createInDatabase(tableName, request.getNotNullFields()));
 
 		getContext().getLogger().log("\nCreate request successfully processed\n");
+		getContext().getLogger().log("\n################\n");
 	}
 	
-	private String prePrepareCreateStatement(String tableName, List<String> columns) {
+	public static String prePrepareCreateStatement(String tableName, List<String> columns) {
 		StringBuilder firstString = new StringBuilder();
 		StringBuilder lastString = new StringBuilder();
 		
@@ -72,6 +73,7 @@ public abstract class AddAPIHandler extends APIHandler {
 				case "description":
 				case "pictureURL":
 				case "websiteURL":
+				case "name":
 				case "firstName":
 				case "lastName":
 				case "email":

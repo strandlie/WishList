@@ -59,6 +59,7 @@ public abstract class UpdateAPIHandler extends APIHandler {
 					case "description":
 					case "pictureURL":
 					case "websiteURL":
+					case "name":
 					case "firstName":
 					case "lastName":
 					case "email":
@@ -73,6 +74,7 @@ public abstract class UpdateAPIHandler extends APIHandler {
 			response.setId(id);
 			
 			getContext().getLogger().log("\nUpdate successfully processed\n");
+			getContext().getLogger().log("\n################\n");
 			
 		} catch (SQLException e) {
 			try {

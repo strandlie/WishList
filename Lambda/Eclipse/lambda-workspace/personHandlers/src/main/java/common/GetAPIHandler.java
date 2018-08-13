@@ -22,6 +22,7 @@ public abstract class GetAPIHandler extends APIHandler {
 	
 	protected void logEnd() {
 		getContext().getLogger().log("\nRetrieve request successfully processed\n");
+		getContext().getLogger().log("\n################\n");
 	}
 	
 	/**
@@ -40,7 +41,7 @@ public abstract class GetAPIHandler extends APIHandler {
 			resultSet = statement.executeQuery();
 	}
 	
-	private String prePrepareRetrieveStatement(String tableName, String columnForSelection) {
+	public static String prePrepareRetrieveStatement(String tableName, String columnForSelection) {
 		String sql = "SELECT * FROM " + tableName + 
 					" WHERE " + columnForSelection + 
 					" = ?";

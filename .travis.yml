@@ -3,7 +3,7 @@ jdk:
         - oraclejdk8
 sudo: false
 before_script:
-    cd Lambda/Eclipse/lambda-workspace/personHandlers/
+    cd Lambda/Eclipse/lambda-workspace/WishlistAPI/
 install:
     true
 notifications:

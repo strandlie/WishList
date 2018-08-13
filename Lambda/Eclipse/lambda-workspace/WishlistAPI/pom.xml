@@ -3,8 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.strandlie.lambda</groupId>
-  <artifactId>addPerson</artifactId>
-  <version>1.0.0</version>
+  <artifactId>WishlistAPI</artifactId>
+  <version>1.0.1</version>
   <packaging>jar</packaging>
 
   <build>

@@ -1,0 +1,12 @@
+com/strandlie/lambda/person/AddPersonAPIHandler.class
+com/strandlie/lambda/item/ItemRequest.class
+com/strandlie/lambda/item/GetItemAPIHandler.class
+com/strandlie/lambda/person/UpdatePersonAPIHandler.class
+com/strandlie/lambda/item/AddItemAPIHandler.class
+com/strandlie/lambda/item/ItemResponse.class
+com/strandlie/lambda/person/PersonResponse.class
+com/strandlie/lambda/item/DeleteItemAPIHandler.class
+com/strandlie/lambda/item/UpdateItemAPIHandler.class
+com/strandlie/lambda/person/DeletePersonAPIHandler.class
+com/strandlie/lambda/person/PersonRequest.class
+com/strandlie/lambda/person/GetPersonAPIHandler.class

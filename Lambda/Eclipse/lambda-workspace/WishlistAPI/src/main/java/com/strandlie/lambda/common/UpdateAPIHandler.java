@@ -50,6 +50,7 @@ public abstract class UpdateAPIHandler extends APIHandler {
 					case "itemID":
 					case "quantity":
 					case "wisherID":
+					case "wishID":
 						updateInDatabase(tableName, fieldName, Integer.parseInt(notNullFields.get(fieldName)), APIHandler.IDCOLUMN, id);
 						break;
 					case "price":

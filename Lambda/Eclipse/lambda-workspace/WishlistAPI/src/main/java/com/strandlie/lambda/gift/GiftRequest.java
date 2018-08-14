@@ -49,6 +49,14 @@ public class GiftRequest extends APIRequest {
 		return getIntFromMap("quantity");
 	}
 	
+	public void setWishID(int id) {
+		this.fields().put("wishID", Integer.toString(id));
+	}
+	
+	public Integer getWishID(int id) {
+		return getIntFromMap("wishID");
+	}
+	
 	
 
 }

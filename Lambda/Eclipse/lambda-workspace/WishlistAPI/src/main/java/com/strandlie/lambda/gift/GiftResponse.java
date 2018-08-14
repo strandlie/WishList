@@ -81,4 +81,13 @@ public class GiftResponse extends APIResponse {
 		return Integer.parseInt(temp_id);
 	
 	}
+	
+	
+	public void setWishID(int id) {
+		this.fields().put("wishID", Integer.toString(id));
+	}
+	
+	public Integer getWishID(int id) {
+		return getIntFromMap("wishID");
+	}
 }

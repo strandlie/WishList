@@ -32,8 +32,8 @@ public class UpdatePersonAPIHandlerTest {
 			connection.setCatalog(System.getenv("DBDatabase"));
 			Statement statement = connection.createStatement();
 			
-			statement.executeUpdate("DROP TABLE IF EXISTS wish");
 			statement.executeUpdate("DROP TABLE IF EXISTS gift");
+			statement.executeUpdate("DROP TABLE IF EXISTS wish");
 			statement.executeUpdate("DROP TABLE IF EXISTS person");
 			statement.executeUpdate("CREATE TABLE person(" + 
 					"id INTEGER PRIMARY KEY AUTO_INCREMENT," + 

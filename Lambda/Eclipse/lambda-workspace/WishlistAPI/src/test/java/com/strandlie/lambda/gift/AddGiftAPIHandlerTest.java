@@ -59,20 +59,36 @@ public class AddGiftAPIHandlerTest {
 					"phoneNr VARCHAR(20)," +
 					"pictureURL VARCHAR(300)" + 
 					");");
+			statement.executeUpdate("CREATE TABLE wish(" + 
+					"id INTEGER PRIMARY KEY AUTO_INCREMENT, " + 
+					"wisherID INTEGER, " + 
+					"itemID INTEGER, " + 
+					"quantity INTEGER, " + 
+					"CONSTRAINT wisherID_FK_wish FOREIGN KEY (wisherID) REFERENCES person(id) " + 
+						"ON DELETE SET NULL " + 
+					    "ON UPDATE CASCADE, " +
+					"CONSTRAINT itemID_FK_wish FOREIGN KEY (itemID) REFERENCES item(id) " + 
+					    "ON DELETE CASCADE " + 
+					    "ON UPDATE CASCADE" + 
+					");");
 			statement.executeUpdate("CREATE TABLE gift(" + 
 					"id INTEGER PRIMARY KEY AUTO_INCREMENT, " + 
 					"giverID INTEGER, " + 
 					"recepientID INTEGER, " +
 					"itemID INTEGER, " + 
 					"quantity INTEGER, " + 
-					"CONSTRAINT giverID_FK FOREIGN KEY (giverID) REFERENCES person(id) " + 
+					"wishID INTEGER, " + 
+					"CONSTRAINT giverID_FK_gift FOREIGN KEY (giverID) REFERENCES person(id) " + 
 						"ON DELETE SET NULL " + 
 					    "ON UPDATE CASCADE, " +
-					 "CONSTRAINT recepientID_FK FOREIGN KEY (recepientID) REFERENCES person(id) " + 
+					 "CONSTRAINT recepientID_FK_gift FOREIGN KEY (recepientID) REFERENCES person(id) " + 
 					    "ON DELETE SET NULL " + 
 					    "ON UPDATE CASCADE, " + 
-					"CONSTRAINT itemID_FK FOREIGN KEY (itemID) REFERENCES item(id) " + 
+					"CONSTRAINT itemID_FK_gift FOREIGN KEY (itemID) REFERENCES item(id) " + 
 					    "ON DELETE CASCADE " + 
+					    "ON UPDATE CASCADE, " + 
+					"CONSTRAINT wishID_FK_gift FOREIGN KEY (wishID) REFERENCES wish(id) " +
+					    "ON DELETE SET NULL " + 
 					    "ON UPDATE CASCADE" + 
 					");");
 

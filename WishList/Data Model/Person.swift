@@ -7,34 +7,47 @@
 //
 
 import UIKit
-import OHMySQL
 
-class Person: NSObject  {
+class Person {
     
     //MARK: Properties
-    var personID: Int
-    var name: String
+    var personID: Int?
+    var firstName: String
+    var lastName: String
+    var email: String?
+    var phoneNr: String?
+    var pictureURL: URL?
    
     
     //MARK: Initialization
-    init?(name: String) {
-        guard !(name.isEmpty) else {
+    init?(firstName: String, lastName: String) {
+        guard (!(firstName.isEmpty) || lastName.isEmpty) else {
             return nil
         }
-        self.name = name
-        super.init()
+        self.firstName = firstName
+        self.lastName = lastName
+        
     }
     
-    func setName(name: String) {
-        guard !(name.isEmpty) else {
+    func setFirstName(firstName: String) {
+        guard !(firstName.isEmpty) else {
             return
         }
-        self.name = name
+        self.firstName = firstName
     }
     
-    func getName() -> String {
-        return self.name
+    func getFirstName() -> String {
+        return self.firstName
     }
+    
+    func setLastName(lastName: String) {
+        guard !(lastName.isEmpty) else {
+            return
+        }
+        self.lastName = lastName
+    }
+    
+    
     
     
     

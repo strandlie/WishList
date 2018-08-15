@@ -3,16 +3,19 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0669F53CA28BBD95BAD2586E /* Pods_WishList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2217357EC4C26A08B6410944 /* Pods_WishList.framework */; };
-		8BBD163E2069305A00F0D843 /* GiftGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBD163D2069305A00F0D843 /* GiftGroup.swift */; };
+		8B7BF3A62123A54600968139 /* WISHLISTItemInputModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7BF39E2123A54200968139 /* WISHLISTItemInputModel.swift */; };
+		8B7BF3A72123A54600968139 /* WISHLISTWishInputModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7BF39F2123A54300968139 /* WISHLISTWishInputModel.swift */; };
+		8B7BF3A82123A54600968139 /* Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7BF3A02123A54300968139 /* Empty.swift */; };
+		8B7BF3A92123A54600968139 /* WISHLISTWishListAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7BF3A12123A54400968139 /* WISHLISTWishListAPIClient.swift */; };
+		8B7BF3AA2123A54600968139 /* WISHLISTPersonInputModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7BF3A22123A54400968139 /* WISHLISTPersonInputModel.swift */; };
+		8B7BF3AB2123A54600968139 /* WISHLISTGiftInputModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7BF3A32123A54500968139 /* WISHLISTGiftInputModel.swift */; };
+		8B7BF3AC2123A54600968139 /* WISHLISTGiftGroupInputModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7BF3A42123A54500968139 /* WISHLISTGiftGroupInputModel.swift */; };
 		8BBD16402069323A00F0D843 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBD163F2069323A00F0D843 /* Person.swift */; };
-		8BBD1644206AA6F000F0D843 /* Gift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBD1643206AA6F000F0D843 /* Gift.swift */; };
-		8BBD1646206B0E6F00F0D843 /* DatabaseCRUDProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBD1645206B0E6F00F0D843 /* DatabaseCRUDProtocol.swift */; };
-		8BBD1649206B0EF000F0D843 /* GiftDatabaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBD1648206B0EF000F0D843 /* GiftDatabaseController.swift */; };
 		8BDB70522001379E009D35AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDB70512001379E009D35AD /* AppDelegate.swift */; };
 		8BDB70542001379E009D35AD /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDB70532001379E009D35AD /* RootViewController.swift */; };
 		8BDB70562001379E009D35AD /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDB70552001379E009D35AD /* GroupViewController.swift */; };
@@ -25,11 +28,16 @@
 /* Begin PBXFileReference section */
 		2217357EC4C26A08B6410944 /* Pods_WishList.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WishList.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		54865F92B351FE8671AB35AB /* Pods-WishList.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WishList.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WishList/Pods-WishList.debug.xcconfig"; sourceTree = "<group>"; };
-		8BBD163D2069305A00F0D843 /* GiftGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftGroup.swift; sourceTree = "<group>"; };
+		8B7BF39D2123A54200968139 /* Bridging_Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bridging_Header.h; sourceTree = "<group>"; };
+		8B7BF39E2123A54200968139 /* WISHLISTItemInputModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WISHLISTItemInputModel.swift; sourceTree = "<group>"; };
+		8B7BF39F2123A54300968139 /* WISHLISTWishInputModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WISHLISTWishInputModel.swift; sourceTree = "<group>"; };
+		8B7BF3A02123A54300968139 /* Empty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Empty.swift; sourceTree = "<group>"; };
+		8B7BF3A12123A54400968139 /* WISHLISTWishListAPIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WISHLISTWishListAPIClient.swift; sourceTree = "<group>"; };
+		8B7BF3A22123A54400968139 /* WISHLISTPersonInputModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WISHLISTPersonInputModel.swift; sourceTree = "<group>"; };
+		8B7BF3A32123A54500968139 /* WISHLISTGiftInputModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WISHLISTGiftInputModel.swift; sourceTree = "<group>"; };
+		8B7BF3A42123A54500968139 /* WISHLISTGiftGroupInputModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WISHLISTGiftGroupInputModel.swift; sourceTree = "<group>"; };
+		8B7BF3A52123A54500968139 /* AWSApiGatewayBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AWSApiGatewayBridge.h; path = "WishList/API Gateway SDK/AWSApiGatewayBridge.h"; sourceTree = SOURCE_ROOT; };
 		8BBD163F2069323A00F0D843 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
-		8BBD1643206AA6F000F0D843 /* Gift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gift.swift; sourceTree = "<group>"; };
-		8BBD1645206B0E6F00F0D843 /* DatabaseCRUDProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseCRUDProtocol.swift; sourceTree = "<group>"; };
-		8BBD1648206B0EF000F0D843 /* GiftDatabaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftDatabaseController.swift; sourceTree = "<group>"; };
 		8BDB704E2001379E009D35AD /* WishList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WishList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BDB70512001379E009D35AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8BDB70532001379E009D35AD /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
@@ -54,6 +62,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8B7BF39C2123A52600968139 /* API Gateway SDK */ = {
+			isa = PBXGroup;
+			children = (
+				8B7BF3A52123A54500968139 /* AWSApiGatewayBridge.h */,
+				8B7BF39D2123A54200968139 /* Bridging_Header.h */,
+				8B7BF3A02123A54300968139 /* Empty.swift */,
+				8B7BF3A42123A54500968139 /* WISHLISTGiftGroupInputModel.swift */,
+				8B7BF3A32123A54500968139 /* WISHLISTGiftInputModel.swift */,
+				8B7BF39E2123A54200968139 /* WISHLISTItemInputModel.swift */,
+				8B7BF3A22123A54400968139 /* WISHLISTPersonInputModel.swift */,
+				8B7BF39F2123A54300968139 /* WISHLISTWishInputModel.swift */,
+				8B7BF3A12123A54400968139 /* WISHLISTWishListAPIClient.swift */,
+			);
+			path = "API Gateway SDK";
+			sourceTree = "<group>";
+		};
 		8BBD1636206865A500F0D843 /* App Delegate */ = {
 			isa = PBXGroup;
 			children = (
@@ -65,11 +89,9 @@
 		8BBD1637206865C800F0D843 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				8BBD1647206B0EDC00F0D843 /* DatabaseControllers */,
 				8BDB70532001379E009D35AD /* RootViewController.swift */,
 				8BDB70552001379E009D35AD /* GroupViewController.swift */,
 				8BDB70572001379E009D35AD /* ModelController.swift */,
-				8BBD1645206B0E6F00F0D843 /* DatabaseCRUDProtocol.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -108,19 +130,9 @@
 		8BBD163C2069302100F0D843 /* Data Model */ = {
 			isa = PBXGroup;
 			children = (
-				8BBD163D2069305A00F0D843 /* GiftGroup.swift */,
 				8BBD163F2069323A00F0D843 /* Person.swift */,
-				8BBD1643206AA6F000F0D843 /* Gift.swift */,
 			);
 			path = "Data Model";
-			sourceTree = "<group>";
-		};
-		8BBD1647206B0EDC00F0D843 /* DatabaseControllers */ = {
-			isa = PBXGroup;
-			children = (
-				8BBD1648206B0EF000F0D843 /* GiftDatabaseController.swift */,
-			);
-			path = DatabaseControllers;
 			sourceTree = "<group>";
 		};
 		8BDB70452001379E009D35AD = {
@@ -145,6 +157,7 @@
 		8BDB70502001379E009D35AD /* WishList */ = {
 			isa = PBXGroup;
 			children = (
+				8B7BF39C2123A52600968139 /* API Gateway SDK */,
 				8BBD163C2069302100F0D843 /* Data Model */,
 				8BBD1636206865A500F0D843 /* App Delegate */,
 				8BBD1637206865C800F0D843 /* Controllers */,
@@ -204,7 +217,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 0920;
-				ORGANIZATIONNAME = Liferoom;
+				ORGANIZATIONNAME = Strandlie;
 				TargetAttributes = {
 					8BDB704D2001379E009D35AD = {
 						CreatedOnToolsVersion = 9.2;
@@ -213,7 +226,7 @@
 				};
 			};
 			buildConfigurationList = 8BDB70492001379E009D35AD /* Build configuration list for PBXProject "WishList" */;
-			compatibilityVersion = "Xcode 8.0";
+			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -284,15 +297,13 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-WishList/Pods-WishList-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/OHMySQL/OHMySQL.framework",
-				"${BUILT_PRODUCTS_DIR}/Socket.swift/SocketSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftWebSocket/SwiftWebSocket.framework",
+				"${BUILT_PRODUCTS_DIR}/AWSAPIGateway/AWSAPIGateway.framework",
+				"${BUILT_PRODUCTS_DIR}/AWSCore/AWSCore.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OHMySQL.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftWebSocket.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSAPIGateway.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCore.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -306,12 +317,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BBD1644206AA6F000F0D843 /* Gift.swift in Sources */,
-				8BBD1649206B0EF000F0D843 /* GiftDatabaseController.swift in Sources */,
+				8B7BF3AA2123A54600968139 /* WISHLISTPersonInputModel.swift in Sources */,
+				8B7BF3AC2123A54600968139 /* WISHLISTGiftGroupInputModel.swift in Sources */,
+				8B7BF3A62123A54600968139 /* WISHLISTItemInputModel.swift in Sources */,
+				8B7BF3A92123A54600968139 /* WISHLISTWishListAPIClient.swift in Sources */,
 				8BBD16402069323A00F0D843 /* Person.swift in Sources */,
-				8BBD1646206B0E6F00F0D843 /* DatabaseCRUDProtocol.swift in Sources */,
+				8B7BF3A72123A54600968139 /* WISHLISTWishInputModel.swift in Sources */,
+				8B7BF3A82123A54600968139 /* Empty.swift in Sources */,
+				8B7BF3AB2123A54600968139 /* WISHLISTGiftInputModel.swift in Sources */,
 				8BDB70542001379E009D35AD /* RootViewController.swift in Sources */,
-				8BBD163E2069305A00F0D843 /* GiftGroup.swift in Sources */,
 				8BDB70582001379E009D35AD /* ModelController.swift in Sources */,
 				8BDB70562001379E009D35AD /* GroupViewController.swift in Sources */,
 				8BDB70522001379E009D35AD /* AppDelegate.swift in Sources */,
@@ -393,6 +407,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "WishList/API Gateway SDK/AWSApiGatewayBridge.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -442,7 +457,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_BRIDGING_HEADER = "WishList/API Gateway SDK/AWSApiGatewayBridge.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -454,9 +471,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.liferoom.WishList;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/hstrandlie/Documents/AppDevelopment/WishList/WishList/API Gateway SDK/Bridging_Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -469,9 +490,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.liferoom.WishList;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/hstrandlie/Documents/AppDevelopment/WishList/WishList/API Gateway SDK/Bridging_Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

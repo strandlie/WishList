@@ -5,8 +5,6 @@ target 'WishList' do
   use_frameworks!
 
   # Pods for WishList
-  pod 'OHMySQL', '~> 2.1'
-  pod 'SwiftWebSocket'
-  pod 'Socket.swift', '~> 2.2'
+  pod 'AWSAPIGateway', '~> 2.4.7'
 
 end

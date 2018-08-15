@@ -4,28 +4,21 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>OHMySQL.xcscheme</key>
+		<key>AWSAPIGateway.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>Pods-WishList.xcscheme</key>
+		<key>AWSCore.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
-		<key>Socket.swift.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>3</integer>
-		</dict>
-		<key>SwiftWebSocket.xcscheme</key>
+		<key>Pods-WishList.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

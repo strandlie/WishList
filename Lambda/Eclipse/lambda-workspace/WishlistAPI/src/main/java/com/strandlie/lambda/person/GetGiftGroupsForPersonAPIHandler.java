@@ -19,7 +19,7 @@ public class GetGiftGroupsForPersonAPIHandler extends GetAPIHandler implements R
 	public PersonResponse handleRequest(PersonRequest request, Context context) {
 		
 		setContext(context);
-		getContext().getLogger().log("Recieved retrieve request for GiftGroups for person with id: " + this.request.getId());
+		getContext().getLogger().log("Recieved retrieve request for GiftGroups for person with id: " + request.getId());
 		
 		this.request = request;
 		this.response = new PersonResponse();

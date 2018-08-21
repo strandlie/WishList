@@ -16,7 +16,7 @@ public class GetPersonAPIHandler extends GetAPIHandler implements RequestHandler
 	@Override
 	public PersonResponse handleRequest(PersonRequest request, Context context) {
 		
-		this.request = APIRequestIsPersonRequest(request);
+		this.request = request;
 		this.response = new PersonResponse();
 		setContext(context);
 		

@@ -10,13 +10,14 @@ public class GiftGroupResponse extends APIResponse {
 	private boolean giftGroupIsUpdated;
 	private boolean giftGroupIsDeleted;
 	private boolean personsAreAddedToGiftGroup;
+	private List<Integer> personsInGiftGroup;
 	
 	@Override
 	public String toString() {
 		StringBuilder string = new StringBuilder();
 		string.append(super.toString());
-		string.append("\nIDs of persons in giftGroup: \n");
 		if (!(personsInGiftGroup == null)) {
+			string.append("\nIDs of persons in giftGroup: \n");
 			for (Integer id : personsInGiftGroup) {
 				string.append(id.toString() + "\n");
 			}
@@ -24,7 +25,6 @@ public class GiftGroupResponse extends APIResponse {
 		return string.toString();
 	}
 	
-	private List<Integer> personsInGiftGroup;
 	/**
 	 * @return the giftGroupIsAdded
 	 */

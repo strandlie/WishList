@@ -1,5 +1,7 @@
 package com.strandlie.lambda.person;
 
+import java.util.List;
+
 import com.strandlie.lambda.common.APIResponse;
 
 public class PersonResponse extends APIResponse {
@@ -7,6 +9,20 @@ public class PersonResponse extends APIResponse {
 	private boolean personIsAdded;
 	private boolean personIsUpdated;
 	private boolean personIsDeleted;
+	private List<Integer> giftGroupsForPerson;
+	
+	@Override
+	public String toString() {
+		StringBuilder string = new StringBuilder();
+		string.append(super.toString());
+		if (!(giftGroupsForPerson == null)) {
+			string.append("\nIDs of GiftGroups this person is in: \n");
+			for (Integer id : giftGroupsForPerson) {
+				string.append(id.toString() + "\n");
+			}
+		}
+		return string.toString();
+	}
 	
 	public boolean getPersonIsAdded() {
 		return personIsAdded;
@@ -71,5 +87,13 @@ public class PersonResponse extends APIResponse {
 	public void setPictureURL(String pictureURL) {
 		this.fields().put("pictureURL", pictureURL);
 	}
-
+	
+	
+	public void setGiftGroupsForPerson(List<Integer> giftGroups) {
+		this.giftGroupsForPerson = giftGroups;
+	}
+	
+	public List<Integer> getGiftGroupsForPerson() {
+		return this.giftGroupsForPerson;
+	}
 }

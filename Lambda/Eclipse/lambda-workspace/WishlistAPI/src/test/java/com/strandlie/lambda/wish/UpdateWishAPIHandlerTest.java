@@ -42,6 +42,7 @@ public class UpdateWishAPIHandlerTest {
 			
 			statement.executeUpdate("DROP TABLE IF EXISTS gift");
 			statement.executeUpdate("DROP TABLE IF EXISTS wish");
+			statement.executeUpdate("DROP TABLE IF EXISTS personInGiftGroup");
 			statement.executeUpdate("DROP TABLE IF EXISTS person");
 			statement.executeUpdate("DROP TABLE IF EXISTS item");
 			

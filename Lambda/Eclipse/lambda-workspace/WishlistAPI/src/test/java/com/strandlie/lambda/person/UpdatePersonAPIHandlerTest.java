@@ -34,6 +34,7 @@ public class UpdatePersonAPIHandlerTest {
 			
 			statement.executeUpdate("DROP TABLE IF EXISTS gift");
 			statement.executeUpdate("DROP TABLE IF EXISTS wish");
+			statement.executeUpdate("DROP TABLE IF EXISTS personInGiftGroup");
 			statement.executeUpdate("DROP TABLE IF EXISTS person");
 			statement.executeUpdate("CREATE TABLE person(" + 
 					"id INTEGER PRIMARY KEY AUTO_INCREMENT," + 

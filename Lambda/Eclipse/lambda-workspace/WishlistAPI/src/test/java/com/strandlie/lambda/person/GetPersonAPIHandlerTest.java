@@ -52,8 +52,8 @@ public class GetPersonAPIHandlerTest {
     @BeforeClass
     public static void createInput() throws IOException {
     	initialPersonInput = new PersonRequest();
-    	initialPersonInput.setFirstName("Marte");
-    	initialPersonInput.setLastName("Sivesind");
+    	initialPersonInput.setFirstName("Test");
+    	initialPersonInput.setLastName("Person");
     	initialPersonInput.setEmail("tull@tull.no");
     	initialPersonInput.setPhoneNr("12345678");
         initialPersonInput.setPictureURL("skjdla.iitjhja.hgb");

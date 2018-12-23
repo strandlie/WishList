@@ -25,8 +25,8 @@ public class AddPersonAPIHandlerTest {
     @BeforeClass
     public static void createInput() {
         addPersonInput = new PersonRequest();
-        addPersonInput.setFirstName("Marte");
-        addPersonInput.setLastName("Sivesind");
+        addPersonInput.setFirstName("Test");
+        addPersonInput.setLastName("Person");
         addPersonInput.setEmail("tull@tull.no");
         addPersonInput.setPhoneNr("12345678");
         addPersonInput.setPictureURL("skjdla.iitjhja.hgb");

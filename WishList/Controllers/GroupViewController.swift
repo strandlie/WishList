@@ -12,8 +12,6 @@ class GroupViewController: UIViewController {
 
     @IBOutlet weak var dataLabel: UILabel!
 
-    var groups = [GiftGroup]()
-
 
     override func viewDidLoad() {
         super.viewDidLoad()

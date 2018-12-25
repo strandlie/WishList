@@ -1,18 +1,15 @@
 PODS:
-  - OHMySQL (2.1.3)
-  - Socket.swift (2.2.0)
-  - SwiftWebSocket (2.7.0)
+  - AWSAPIGateway (2.4.16):
+    - AWSCore (= 2.4.16)
+  - AWSCore (2.4.16)
 
 DEPENDENCIES:
-  - OHMySQL (~> 2.1)
-  - Socket.swift (~> 2.2)
-  - SwiftWebSocket
+  - AWSAPIGateway (~> 2.4.7)
 
 SPEC CHECKSUMS:
-  OHMySQL: 8bc54d2b8b9e1acfa0e652b18856a9cdbb24c431
-  Socket.swift: 5fb2c79f327a061b68d33a946256b9fd7a1e1a41
-  SwiftWebSocket: 612c9729fd503cb6b0b8b45390c788686dac306f
+  AWSAPIGateway: 49d48577724a9f53eda1e8c53411c1f1ebac3b7b
+  AWSCore: 7c3c129991e6387bcbad7132bc3661e7135754db
 
-PODFILE CHECKSUM: 03f2fec53f8b2e25fa977888de57fc6f6c9a9949
+PODFILE CHECKSUM: 8bdc830ed0f506dc0247711367e3acce9b38ffe0
 
 COCOAPODS: 1.4.0
